@@ -86,6 +86,7 @@ final readonly class Parser
          */
         foreach ($sections as $sectionName => &$content) {
             $content = trim($content);
+            $content = str_replace("\r\n", "\n", $content);
             switch ($sectionName) {
                 case self::SECTION_ENV:
                 case self::SECTION_INI:
@@ -99,7 +100,6 @@ final readonly class Parser
                     $content = $values;
                     break;
                 case self::SECTION_CONFLICTS:
-                    $content = str_replace(PHP_EOL, "\n", $content);
                     $content = explode("\n", $content);
                     break;
             }

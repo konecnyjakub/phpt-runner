@@ -22,6 +22,8 @@ final class ParserTest extends TestCase
             Parser::SECTION_ENV => [],
             Parser::SECTION_INI => [],
             Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test.phpt");
@@ -32,6 +34,8 @@ final class ParserTest extends TestCase
             Parser::SECTION_ENV => [],
             Parser::SECTION_INI => [],
             Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
@@ -42,6 +46,8 @@ final class ParserTest extends TestCase
             Parser::SECTION_ENV => ["one" => "abc", ],
             Parser::SECTION_INI => [],
             Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
@@ -52,6 +58,8 @@ final class ParserTest extends TestCase
             Parser::SECTION_EXPECT => "bool(true)",
             Parser::SECTION_ENV => [],
             Parser::SECTION_INI => [],
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
@@ -62,6 +70,8 @@ final class ParserTest extends TestCase
             Parser::SECTION_ENV => [],
             Parser::SECTION_INI => ["allow_url_fopen" => "0",],
             Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
@@ -73,6 +83,32 @@ final class ParserTest extends TestCase
             Parser::SECTION_INI => [],
             Parser::SECTION_ARGS => "",
             Parser::SECTION_STDIN => "first line" . PHP_EOL . "second line",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => false,
+        ], $sections);
+
+        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt");
+        $this->assertSame([
+            Parser::SECTION_TEST => "Failing test",
+            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
+            Parser::SECTION_EXPECT => "test1234",
+            Parser::SECTION_ENV => [],
+            Parser::SECTION_INI => [],
+            Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => false,
+            Parser::SECTION_XFAIL => true,
+        ], $sections);
+
+        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt");
+        $this->assertSame([
+            Parser::SECTION_TEST => "Flaky test",
+            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo rand(0, 1);" . PHP_EOL . "?>",
+            Parser::SECTION_EXPECT => "1",
+            Parser::SECTION_ENV => [],
+            Parser::SECTION_INI => [],
+            Parser::SECTION_ARGS => "",
+            Parser::SECTION_FLAKY => "This is random",
+            Parser::SECTION_XFAIL => false,
         ], $sections);
 
         $this->assertSame([], $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt"));

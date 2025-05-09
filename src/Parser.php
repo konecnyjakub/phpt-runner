@@ -43,9 +43,12 @@ final readonly class Parser
     private const array STRING_SECTIONS = [
         self::SECTION_ARGS,
     ];
+    private const array BOOLEAN_SECTIONS = [
+        self::SECTION_XFAIL, self::SECTION_FLAKY,
+    ];
 
     /**
-     * @return array<string, string|array<string, mixed>>
+     * @return array<string, string|bool|array<string, mixed>>
      */
     public function parse(string $filename): array
     {
@@ -72,7 +75,7 @@ final readonly class Parser
     }
 
     /**
-     * @param array<string, string|array<string, mixed>> $sections
+     * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function transformSections(array &$sections): void
     {
@@ -99,7 +102,7 @@ final readonly class Parser
     }
 
     /**
-     * @param array<string, string|array<string, mixed>> $sections
+     * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function addOptionalSections(array &$sections): void
     {
@@ -113,10 +116,17 @@ final readonly class Parser
                 $sections[$sectionName] = "";
             }
         }
+        foreach (self::BOOLEAN_SECTIONS as $sectionName) {
+            if (!isset($sections[$sectionName])) {
+                $sections[$sectionName] = false;
+            } elseif ($sections[$sectionName] === "") {
+                $sections[$sectionName] = true;
+            }
+        }
     }
 
     /**
-     * @param array<string, string|array<string, mixed>> $sections
+     * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function checkRequiredSections(array $sections, string $filename): void
     {

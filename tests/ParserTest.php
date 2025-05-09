@@ -116,11 +116,11 @@ final class ParserTest extends TestCase
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);
-        }, ParseErrorException::class, "Required section TEST not found in file $filename");
+        }, RequiredSectionMissingException::class, "Required section TEST not found in file $filename");
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);
-        }, ParseErrorException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL is required, none found in file $filename");
+        }, RequiredSectionMissingException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL is required, none found in file $filename");
     }
 }

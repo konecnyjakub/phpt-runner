@@ -133,11 +133,11 @@ final readonly class Parser
         foreach (self::REQUIRED_SECTIONS as $requiredSection) {
             if (is_string($requiredSection)) {
                 if (!array_key_exists($requiredSection, $sections)) {
-                    throw new ParseErrorException("Required section $requiredSection not found in file $filename");
+                    throw new RequiredSectionMissingException($requiredSection, $filename);
                 }
             } elseif (is_array($requiredSection)) {
                 if (count(array_intersect($requiredSection, array_keys($sections))) === 0) {
-                    throw new ParseErrorException("At least one of sections " . join(", ", $requiredSection) . " is required, none found in file $filename");
+                    throw new RequiredSectionMissingException($requiredSection, $filename);
                 }
             }
         }

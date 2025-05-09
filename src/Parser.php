@@ -126,6 +126,16 @@ final readonly class Parser
                     $content = str_replace(PHP_EOL, "\n", $content);
                     $content = explode("\n", $content);
                     break;
+                case self::SECTION_EXPECTHEADERS:
+                    $values = [];
+                    foreach (explode("\n", $content) as $line) {
+                        $value = explode(":", $line, 2);
+                        if ($value[0] !== "" && isset($value[1])) {
+                            $values[$value[0]] = trim($value[1]);
+                        }
+                    }
+                    $content = $values;
+                    break;
             }
         }
     }

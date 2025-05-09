@@ -202,6 +202,33 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_expected_headers.phpt");
+        $this->assertSame("Test headers", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame(
+            "<?php" . PHP_EOL . "header(\"Content-type: text/plain; charset=UTF-8\");" . PHP_EOL . "header(\"Pragma: no-cache\");" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
+            $result->testCode
+        );
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame(
+            ["Content-type" => "text/plain; charset=UTF-8", "Pragma" => "no-cache", ],
+            $result->expectedHeaders
+        );
+        $this->assertSame("test123", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);

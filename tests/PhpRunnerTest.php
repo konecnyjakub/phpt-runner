@@ -52,6 +52,6 @@ final class PhpRunnerTest extends TestCase
             $parsedFile->testCode,
             iniSettings: $parsedFile->iniSettings
         );
-        $this->assertSame("1", $result); // FIXME: should be 0
+        $this->assertSame("0", $result);
     }
 }

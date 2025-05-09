@@ -25,6 +25,7 @@ To be added
 * --TEST--
 * --SKIPIF--
 * --STDIN--
+* --INI--
 * --ARGS--
 * --ENV--
 * --FILE--
@@ -38,7 +39,6 @@ To be added
 * --EXPECT_EXTERNAL--
 
 ### Implemented but not working sections
-* --INI--
 
 ### Parsed but not implemented sections
 

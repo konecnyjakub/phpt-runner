@@ -49,8 +49,8 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test ini", $result->testName);
-        $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: should be true
-        $this->assertSame("1", $result->output); // FIXME: should be 0
+        $this->assertSame(Outcome::Passed, $result->outcome);
+        $this->assertSame("0", $result->output);
         $this->assertSame("0", $result->expectedOutput);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt";

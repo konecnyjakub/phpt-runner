@@ -27,10 +27,11 @@ final readonly class PhpRunner
         $filename = stream_get_meta_data($file)['uri'];
         fwrite($file, $code);
 
-        $commandLine = $this->phpBinary . " " . $filename;
+        $commandLine = $this->phpBinary;
         foreach ($iniSettings as $key => $value) {
             $commandLine .= " -d $key=$value";
         }
+        $commandLine .= " " . $filename;
         if ($arguments !== "") {
             $commandLine .= " " . $arguments;
         }

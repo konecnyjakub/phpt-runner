@@ -6,6 +6,7 @@ namespace Konecnyjakub\PHPTRunner;
 final class ParsedFile
 {
     public string $testName = "";
+    public string $testDescription = "";
     public string $skipCode = "";
     /** @var string[] */
     public array $conflictingKeys = [];
@@ -21,12 +22,15 @@ final class ParsedFile
     public string $testFile = "";
     /** @var mixed[] */
     public array $testRedirects = [];
+    public bool $requiresCgiBinary = false;
     public bool|string $supposedToFail = false;
     public bool|string $flaky = false;
     /** @var array<string, string> */
     public array $expectedHeaders = [];
     public string $expectedText = "";
     public string $expectedTextFile = "";
+    public string $expectedPattern = "";
+    public string $expectedPatternFile = "";
     public string $expectedRegex = "";
     public string $expectedRegexFile = "";
     public string $cleanCode = "";

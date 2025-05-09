@@ -17,6 +17,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Skipped test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertSame("skip", $result->output);
         $this->assertSame("", $result->expectedOutput);
@@ -25,6 +26,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test", $result->testName);
+        $this->assertSame("Just a basic test", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
@@ -33,6 +35,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test env", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("abc", $result->output);
         $this->assertSame("abc", $result->expectedOutput);
@@ -41,6 +44,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test args", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("bool(true)", $result->output);
         $this->assertSame("bool(true)", $result->expectedOutput);
@@ -49,6 +53,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test ini", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("0", $result->output);
         $this->assertSame("0", $result->expectedOutput);
@@ -57,6 +62,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test input", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("first line" . PHP_EOL . "second line", $result->output);
         $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedOutput);
@@ -65,6 +71,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Failing test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test1234", $result->expectedOutput);
@@ -73,6 +80,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Flaky test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertNotSame(Outcome::Skipped, $result->outcome);
         //$this->assertSame("1", $result->output);
         $this->assertSame("1", $result->expectedOutput);
@@ -81,6 +89,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Conflicting test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
@@ -89,6 +98,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test headers", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
@@ -97,6 +107,7 @@ final class PhptRunnerTest extends TestCase
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test clean", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);

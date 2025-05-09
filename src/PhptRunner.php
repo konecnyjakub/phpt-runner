@@ -16,7 +16,14 @@ final readonly class PhptRunner
         if ($parsedFile->skipCode !== "") {
             $skipResult = $this->phpRunner->runCode($parsedFile->skipCode);
             if (str_starts_with($skipResult, "skip")) {
-                return new FileResultSet($fileName, $parsedFile->testName, Outcome::Skipped, $skipResult, "");
+                return new FileResultSet(
+                    $fileName,
+                    $parsedFile->testName,
+                    $parsedFile->testDescription,
+                    Outcome::Skipped,
+                    $skipResult,
+                    ""
+                );
             }
         }
 
@@ -62,6 +69,7 @@ final readonly class PhptRunner
         return new FileResultSet(
             $fileName,
             $parsedFile->testName,
+            $parsedFile->testDescription,
             $success ? Outcome::Passed : Outcome::Failed,
             $output,
             $expectedOutput // @phpstan-ignore variable.undefined

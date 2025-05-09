@@ -8,6 +8,7 @@ final readonly class FileResultSet
     public function __construct(
         public string $fileName,
         public string $testName,
+        public string $testDescription,
         public Outcome $outcome,
         public string $output,
         public string $expectedOutput

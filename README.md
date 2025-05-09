@@ -23,6 +23,7 @@ To be added
 ### Supported sections
 
 * --TEST--
+* --DESCRIPTION--
 * --SKIPIF--
 * --STDIN--
 * --INI--
@@ -45,13 +46,15 @@ To be added
 * --CONFLICTS--
 * --EXTENSIONS--
 * --REDIRECTTEST--
+* --CGI--
 * --EXPECTHEADERS--
+* --EXPECTF--
+* --EXPECTF_EXTERNAL--
 * --EXPECTREGEX--
 * --EXPECTREGEX_EXTERNAL--
 
 ### Ignored sections
 
-* --DESCRIPTION--
 * --CREDITS--
 * --WHITESPACE_SENSITIVE--
 * --CAPTURE_STDIO--
@@ -64,6 +67,3 @@ To be added
 * --COOKIE--
 * --PHPDBG--
 * --FILEEOF--
-* --CGI--
-* --EXPECTF--
-* --EXPECTF_EXTERNAL--

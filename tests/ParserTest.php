@@ -15,6 +15,7 @@ final class ParserTest extends TestCase
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt");
         $this->assertSame("Skipped test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("<?php echo \"skip\"; ?>", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -25,17 +26,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php echo \"one\"; ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("two", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test.phpt");
         $this->assertSame("Test", $result->testName);
+        $this->assertSame("Just a basic test", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -46,17 +51,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("test123", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
         $this->assertSame("Test env", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -67,17 +76,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php echo getenv(\"one\"); ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("abc", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
         $this->assertSame("Test args", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -88,17 +101,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php var_dump(\$argv[1] === \"--one=abc\" && \$argv[2] === \"--two\" && \$argv[3] === \"def\"); ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("bool(true)", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
         $this->assertSame("Test ini", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -109,17 +126,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php echo ini_get(\"allow_url_fopen\"); ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("0", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
         $this->assertSame("Test input", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -130,17 +151,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php echo stream_get_contents(STDIN); ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt");
         $this->assertSame("Failing test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -151,17 +176,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(true, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("test1234", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt");
         $this->assertSame("Flaky test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -172,17 +201,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php" . PHP_EOL . "echo rand(0, 1);" . PHP_EOL . "?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame("This is random", $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("1", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_conflicts.phpt");
         $this->assertSame("Conflicting test", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame(["one", "two", ], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -193,17 +226,21 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("test123", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_expected_headers.phpt");
         $this->assertSame("Test headers", $result->testName);
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertSame([], $result->requiredExtensions);
@@ -217,6 +254,7 @@ final class ParserTest extends TestCase
         );
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame(
@@ -225,11 +263,14 @@ final class ParserTest extends TestCase
         );
         $this->assertSame("test123", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt");
+        $this->assertSame("", $result->testDescription);
         $this->assertSame("Test clean", $result->testName);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
@@ -241,11 +282,14 @@ final class ParserTest extends TestCase
         $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "touch(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\");" . PHP_EOL . "?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
         $this->assertSame("test123", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("<?php unlink(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\") ?>", $result->cleanCode);

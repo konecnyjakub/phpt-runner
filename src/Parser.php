@@ -11,6 +11,7 @@ namespace Konecnyjakub\PHPTRunner;
 final readonly class Parser
 {
     public const string SECTION_TEST = "TEST";
+    public const string SECTION_DESCRIPTION = "DESCRIPTION";
     public const string SECTION_SKIPIF = "SKIPIF";
     public const string SECTION_CONFLICTS = "CONFLICTS";
     public const string SECTION_EXTENSIONS = "EXTENSIONS";
@@ -21,11 +22,14 @@ final readonly class Parser
     public const string SECTION_FILE = "FILE";
     public const string SECTION_FILE_EXTERNAL = "FILE_EXTERNAL";
     public const string SECTION_REDIRECTTEST = "REDIRECTTEST";
+    public const string SECTION_CGI = "CGI";
     public const string SECTION_XFAIL = "XFAIL";
     public const string SECTION_FLAKY = "FLAKY";
     public const string SECTION_EXPECTHEADERS = "EXPECTHEADERS";
     public const string SECTION_EXPECT = "EXPECT";
     public const string SECTION_EXPECT_EXTERNAL = "EXPECT_EXTERNAL";
+    public const string SECTION_EXPECTF = "EXPECTF";
+    public const string SECTION_EXPECTF_EXTERNAL = "EXPECTF_EXTERNAL";
     public const string SECTION_EXPECTREGEX = "EXPECTREGEX";
     public const string SECTION_EXPECTREGEX_EXTERNAL = "EXPECTREGEX_EXTERNAL";
     public const string SECTION_CLEAN = "CLEAN";
@@ -43,6 +47,7 @@ final readonly class Parser
         self::SECTION_EXTENSIONS,
     ];
     private const array OPTIONAL_SECTIONS_STRING = [
+        self::SECTION_DESCRIPTION,
         self::SECTION_SKIPIF,
         self::SECTION_STDIN,
         self::SECTION_ARGS,
@@ -51,7 +56,9 @@ final readonly class Parser
         self::SECTION_CLEAN,
     ];
     private const array OPTIONAL_SECTIONS_BOOLEAN = [
-        self::SECTION_XFAIL, self::SECTION_FLAKY,
+        self::SECTION_CGI,
+        self::SECTION_XFAIL,
+        self::SECTION_FLAKY,
     ];
 
     public function parse(string $filename): ParsedFile
@@ -77,6 +84,7 @@ final readonly class Parser
 
         $result = new ParsedFile();
         $result->testName = $sections[self::SECTION_TEST]; // @phpstan-ignore assign.propertyType
+        $result->testDescription = $sections[self::SECTION_DESCRIPTION]; // @phpstan-ignore assign.propertyType
         $result->skipCode = $sections[self::SECTION_SKIPIF]; // @phpstan-ignore assign.propertyType
         $result->conflictingKeys = $sections[self::SECTION_CONFLICTS]; // @phpstan-ignore assign.propertyType
         $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
@@ -87,11 +95,14 @@ final readonly class Parser
         $result->testCode = $sections[self::SECTION_FILE]; // @phpstan-ignore assign.propertyType
         $result->testFile = $sections[self::SECTION_FILE_EXTERNAL]; // @phpstan-ignore assign.propertyType
         $result->testRedirects = $sections[self::SECTION_REDIRECTTEST] ?? []; // @phpstan-ignore assign.propertyType
+        $result->requiresCgiBinary = $sections[self::SECTION_CGI] !== false;
         $result->supposedToFail = $sections[self::SECTION_XFAIL]; // @phpstan-ignore assign.propertyType
         $result->flaky = $sections[self::SECTION_FLAKY]; // @phpstan-ignore assign.propertyType
         $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS] ?? []; // @phpstan-ignore assign.propertyType
         $result->expectedText = $sections[self::SECTION_EXPECT] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedTextFile = $sections[self::SECTION_EXPECT_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->expectedPattern = $sections[self::SECTION_EXPECTF] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->expectedPatternFile = $sections[self::SECTION_EXPECTF_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedRegex = $sections[self::SECTION_EXPECTREGEX] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedRegexFile = $sections[self::SECTION_EXPECTREGEX_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
         $result->cleanCode = $sections[self::SECTION_CLEAN]; // @phpstan-ignore assign.propertyType
@@ -138,6 +149,7 @@ final readonly class Parser
                     break;
                 case self::SECTION_FILE_EXTERNAL:
                 case self::SECTION_EXPECT_EXTERNAL:
+                case self::SECTION_EXPECTF_EXTERNAL:
                 case self::SECTION_EXPECTREGEX_EXTERNAL:
                     $content = dirname($filename) . DIRECTORY_SEPARATOR . $content;
                     break;

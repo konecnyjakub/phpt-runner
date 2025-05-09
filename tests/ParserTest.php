@@ -229,6 +229,27 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt");
+        $this->assertSame("Test clean", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "touch(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\");" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test123", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("<?php unlink(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\") ?>", $result->cleanCode);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);

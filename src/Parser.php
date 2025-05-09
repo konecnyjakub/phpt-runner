@@ -39,6 +39,7 @@ final readonly class Parser
     private const array ARRAY_SECTIONS = [
         self::SECTION_ENV,
         self::SECTION_INI,
+        self::SECTION_CONFLICTS,
     ];
     private const array STRING_SECTIONS = [
         self::SECTION_ARGS,
@@ -96,6 +97,9 @@ final readonly class Parser
                         }
                     }
                     $content = $values;
+                    break;
+                case self::SECTION_CONFLICTS:
+                    $content = explode("\n", $content);
                     break;
             }
         }

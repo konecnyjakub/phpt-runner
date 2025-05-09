@@ -13,167 +13,194 @@ final class ParserTest extends TestCase
     {
         $parser = new Parser();
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Skipped test",
-            Parser::SECTION_SKIPIF => "<?php echo \"skip\"; ?>",
-            Parser::SECTION_FILE => "<?php echo \"one\"; ?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "two",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt");
+        $this->assertSame("Skipped test", $result->testName);
+        $this->assertSame("<?php echo \"skip\"; ?>", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo \"one\"; ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("two", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Test",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "test123",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test.phpt");
+        $this->assertSame("Test", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test123", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Test env",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php echo getenv(\"one\"); ?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "abc",
-            Parser::SECTION_ENV => ["one" => "abc", ],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
+        $this->assertSame("Test env", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame(["one" => "abc", ], $result->envVariables);
+        $this->assertSame("<?php echo getenv(\"one\"); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("abc", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Test args",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_ARGS => "--one=abc --two def",
-            Parser::SECTION_FILE => "<?php var_dump(\$argv[1] === \"--one=abc\" && \$argv[2] === \"--two\" && \$argv[3] === \"def\"); ?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "bool(true)",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
+        $this->assertSame("Test args", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("--one=abc --two def", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php var_dump(\$argv[1] === \"--one=abc\" && \$argv[2] === \"--two\" && \$argv[3] === \"def\"); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("bool(true)", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Test ini",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php echo ini_get(\"allow_url_fopen\"); ?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "0",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => ["allow_url_fopen" => "0",],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
+        $this->assertSame("Test ini", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame(["allow_url_fopen" => "0", ], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo ini_get(\"allow_url_fopen\"); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("0", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Test input",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php echo stream_get_contents(STDIN); ?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "first line" . PHP_EOL . "second line",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "first line" . PHP_EOL . "second line",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
+        $this->assertSame("Test input", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("first line" . PHP_EOL . "second line", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo stream_get_contents(STDIN); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Failing test",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "test1234",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => true,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt");
+        $this->assertSame("Failing test", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(true, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test1234", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Flaky test",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo rand(0, 1);" . PHP_EOL . "?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "1",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => [],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => "This is random",
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt");
+        $this->assertSame("Flaky test", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo rand(0, 1);" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame("This is random", $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("1", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_conflicts.phpt");
-        $this->assertSame([
-            Parser::SECTION_TEST => "Conflicting test",
-            Parser::SECTION_SKIPIF => "",
-            Parser::SECTION_FILE => "<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
-            Parser::SECTION_FILE_EXTERNAL => "",
-            Parser::SECTION_EXPECT => "test123",
-            Parser::SECTION_ENV => [],
-            Parser::SECTION_INI => [],
-            Parser::SECTION_CONFLICTS => ["one", "two", ],
-            Parser::SECTION_EXTENSIONS => [],
-            Parser::SECTION_ARGS => "",
-            Parser::SECTION_STDIN => "",
-            Parser::SECTION_CLEAN => "",
-            Parser::SECTION_FLAKY => false,
-            Parser::SECTION_XFAIL => false,
-        ], $sections);
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_conflicts.phpt");
+        $this->assertSame("Conflicting test", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame(["one", "two", ], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test123", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {

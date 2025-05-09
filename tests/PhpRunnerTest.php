@@ -26,24 +26,24 @@ final class PhpRunnerTest extends TestCase
         );
 
         $parser = new Parser();
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
+        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
         $result = $runner->runCode(
-            $sections[Parser::SECTION_FILE], // @phpstan-ignore argument.type
-            arguments: $sections[Parser::SECTION_ARGS] // @phpstan-ignore argument.type
+            $parsedFile->testCode,
+            arguments: $parsedFile->arguments
         );
         $this->assertSame("bool(true)\n", $result);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
+        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
         $result = $runner->runCode(
-            $sections[Parser::SECTION_FILE], // @phpstan-ignore argument.type
-            env: $sections[Parser::SECTION_ENV] // @phpstan-ignore argument.type
+            $parsedFile->testCode,
+            env: $parsedFile->envVariables
         );
         $this->assertSame("abc", $result);
 
-        $sections = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
+        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
         $result = $runner->runCode(
-            $sections[Parser::SECTION_FILE], // @phpstan-ignore argument.type
-            input: $sections[Parser::SECTION_STDIN] // @phpstan-ignore argument.type
+            $parsedFile->testCode,
+            input: $parsedFile->input
         );
         $this->assertSame("first line" . PHP_EOL . "second line", $result);
     }

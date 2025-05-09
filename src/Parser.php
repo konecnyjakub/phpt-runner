@@ -54,10 +54,7 @@ final readonly class Parser
         self::SECTION_XFAIL, self::SECTION_FLAKY,
     ];
 
-    /**
-     * @return array<string, string|bool|array<string, mixed>>
-     */
-    public function parse(string $filename): array
+    public function parse(string $filename): ParsedFile
     {
         $lines = @file($filename);
         if ($lines === false) {
@@ -78,7 +75,28 @@ final readonly class Parser
         $this->addOptionalSections($sections);
         $this->checkRequiredSections($sections, $filename);
 
-        return $sections;
+        $result = new ParsedFile();
+        $result->testName = $sections[self::SECTION_TEST]; // @phpstan-ignore assign.propertyType
+        $result->skipCode = $sections[self::SECTION_SKIPIF]; // @phpstan-ignore assign.propertyType
+        $result->conflictingKeys = $sections[self::SECTION_CONFLICTS]; // @phpstan-ignore assign.propertyType
+        $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
+        $result->input = $sections[self::SECTION_STDIN]; // @phpstan-ignore assign.propertyType
+        $result->iniSettings = $sections[self::SECTION_INI]; // @phpstan-ignore assign.propertyType
+        $result->arguments = $sections[self::SECTION_ARGS]; // @phpstan-ignore assign.propertyType
+        $result->envVariables = $sections[self::SECTION_ENV]; // @phpstan-ignore assign.propertyType
+        $result->testCode = $sections[self::SECTION_FILE]; // @phpstan-ignore assign.propertyType
+        $result->testFile = $sections[self::SECTION_FILE_EXTERNAL]; // @phpstan-ignore assign.propertyType
+        $result->testRedirects = $sections[self::SECTION_REDIRECTTEST] ?? []; // @phpstan-ignore assign.propertyType
+        $result->supposedToFail = $sections[self::SECTION_XFAIL]; // @phpstan-ignore assign.propertyType
+        $result->flaky = $sections[self::SECTION_FLAKY]; // @phpstan-ignore assign.propertyType
+        $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS] ?? []; // @phpstan-ignore assign.propertyType
+        $result->expectedText = $sections[self::SECTION_EXPECT] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->expectedTextFile = $sections[self::SECTION_EXPECT_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->expectedRegex = $sections[self::SECTION_EXPECTREGEX] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->expectedRegexFile = $sections[self::SECTION_EXPECTREGEX_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
+        $result->cleanCode = $sections[self::SECTION_CLEAN]; // @phpstan-ignore assign.propertyType
+
+        return $result;
     }
 
     /**

@@ -30,6 +30,12 @@ final readonly class Parser
     public const string SECTION_EXPECTREGEX_EXTERNAL = "EXPECTREGEX_EXTERNAL";
     public const string SECTION_CLEAN = "CLEAN";
 
+    private const array REQUIRED_SECTIONS = [
+        self::SECTION_TEST,
+        [self::SECTION_FILE, self::SECTION_FILE_EXTERNAL, self::SECTION_REDIRECTTEST, ],
+        [self::SECTION_EXPECT, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTREGEX, self::SECTION_EXPECTREGEX_EXTERNAL, ],
+    ];
+
     private const array ARRAY_SECTIONS = [
         self::SECTION_ENV,
         self::SECTION_INI,
@@ -57,6 +63,7 @@ final readonly class Parser
                 $sections[$section] .= $line;
             }
         }
+
         foreach ($sections as $sectionName => &$content) {
             $content = trim($content);
             switch ($sectionName) {
@@ -73,6 +80,7 @@ final readonly class Parser
                     break;
             }
         }
+
         foreach (self::ARRAY_SECTIONS as $sectionName) {
             if (!isset($sections[$sectionName])) {
                 $sections[$sectionName] = [];
@@ -83,6 +91,19 @@ final readonly class Parser
                 $sections[$sectionName] = "";
             }
         }
+
+        foreach (self::REQUIRED_SECTIONS as $requiredSection) {
+            if (is_string($requiredSection)) {
+                if (!array_key_exists($requiredSection, $sections)) {
+                    throw new ParseErrorException("Required section $requiredSection not found in file $filename");
+                }
+            } elseif (is_array($requiredSection)) {
+                if (count(array_intersect($requiredSection, array_keys($sections))) === 0) {
+                    throw new ParseErrorException("At least one of sections " . join(", ", $requiredSection) . " is required, none found in file $filename");
+                }
+            }
+        }
+
         return $sections;
     }
 }

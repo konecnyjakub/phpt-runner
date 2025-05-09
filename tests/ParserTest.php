@@ -17,6 +17,8 @@ final class ParserTest extends TestCase
         $this->assertSame([
             Parser::SECTION_TEST => "Skipped test",
             Parser::SECTION_SKIPIF => "<?php echo \"skip\"; ?>",
+            Parser::SECTION_FILE => "<?php echo \"one\"; ?>",
+            Parser::SECTION_EXPECT => "two",
             Parser::SECTION_ENV => [],
             Parser::SECTION_INI => [],
             Parser::SECTION_ARGS => "",
@@ -74,5 +76,15 @@ final class ParserTest extends TestCase
         ], $sections);
 
         $this->assertSame([], $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt"));
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
+        $this->assertThrowsException(function () use ($parser, $filename) {
+            $parser->parse($filename);
+        }, ParseErrorException::class, "Required section TEST not found in file $filename");
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
+        $this->assertThrowsException(function () use ($parser, $filename) {
+            $parser->parse($filename);
+        }, ParseErrorException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL is required, none found in file $filename");
     }
 }

@@ -12,14 +12,22 @@ final readonly class Parser
 {
     public const string SECTION_TEST = "TEST";
     public const string SECTION_SKIPIF = "SKIPIF";
+    public const string SECTION_CONFLICTS = "CONFLICTS";
+    public const string SECTION_EXTENSIONS = "EXTENSIONS";
     public const string SECTION_STDIN = "STDIN";
     public const string SECTION_INI = "INI";
     public const string SECTION_ARGS = "ARGS";
     public const string SECTION_ENV = "ENV";
     public const string SECTION_FILE = "FILE";
+    public const string SECTION_FILE_EXTERNAL = "FILE_EXTERNAL";
+    public const string SECTION_REDIRECTTEST = "REDIRECTTEST";
+    public const string SECTION_XFAIL = "XFAIL";
+    public const string SECTION_FLAKY = "FLAKY";
+    public const string SECTION_EXPECTHEADERS = "EXPECTHEADERS";
     public const string SECTION_EXPECT = "EXPECT";
     public const string SECTION_EXPECT_EXTERNAL = "EXPECT_EXTERNAL";
     public const string SECTION_EXPECTREGEX = "EXPECTREGEX";
+    public const string SECTION_EXPECTREGEX_EXTERNAL = "EXPECTREGEX_EXTERNAL";
     public const string SECTION_CLEAN = "CLEAN";
 
     private const array ARRAY_SECTIONS = [

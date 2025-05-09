@@ -132,7 +132,10 @@ final class ParserTest extends TestCase
             Parser::SECTION_XFAIL => false,
         ], $sections);
 
-        $this->assertSame([], $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt"));
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
+        $this->assertThrowsException(function () use ($parser, $filename) {
+            $parser->parse($filename);
+        }, FileNotFoundException::class, "File $filename does not exist or cannot be read");
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {

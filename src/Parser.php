@@ -55,7 +55,7 @@ final readonly class Parser
     {
         $lines = @file($filename);
         if ($lines === false) {
-            return [];
+            throw new FileNotFoundException("File $filename does not exist or cannot be read");
         }
 
         $sections = [];

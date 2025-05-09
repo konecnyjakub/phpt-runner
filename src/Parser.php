@@ -36,15 +36,15 @@ final readonly class Parser
         [self::SECTION_EXPECT, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTREGEX, self::SECTION_EXPECTREGEX_EXTERNAL, ],
     ];
 
-    private const array ARRAY_SECTIONS = [
+    private const array OPTIONAL_SECTIONS_ARRAY = [
         self::SECTION_ENV,
         self::SECTION_INI,
         self::SECTION_CONFLICTS,
     ];
-    private const array STRING_SECTIONS = [
+    private const array OPTIONAL_SECTIONS_STRING = [
         self::SECTION_ARGS,
     ];
-    private const array BOOLEAN_SECTIONS = [
+    private const array OPTIONAL_SECTIONS_BOOLEAN = [
         self::SECTION_XFAIL, self::SECTION_FLAKY,
     ];
 
@@ -110,17 +110,17 @@ final readonly class Parser
      */
     private function addOptionalSections(array &$sections): void
     {
-        foreach (self::ARRAY_SECTIONS as $sectionName) {
+        foreach (self::OPTIONAL_SECTIONS_ARRAY as $sectionName) {
             if (!isset($sections[$sectionName])) {
                 $sections[$sectionName] = [];
             }
         }
-        foreach (self::STRING_SECTIONS as $sectionName) {
+        foreach (self::OPTIONAL_SECTIONS_STRING as $sectionName) {
             if (!isset($sections[$sectionName])) {
                 $sections[$sectionName] = "";
             }
         }
-        foreach (self::BOOLEAN_SECTIONS as $sectionName) {
+        foreach (self::OPTIONAL_SECTIONS_BOOLEAN as $sectionName) {
             if (!isset($sections[$sectionName])) {
                 $sections[$sectionName] = false;
             } elseif ($sections[$sectionName] === "") {

@@ -71,7 +71,7 @@ final readonly class Parser
             }
         }
 
-        $this->transformSections($sections);
+        $this->transformSections($sections, $filename);
         $this->addOptionalSections($sections);
         $this->checkRequiredSections($sections, $filename);
 
@@ -102,7 +102,7 @@ final readonly class Parser
     /**
      * @param array<string, string|bool|array<string, mixed>> $sections
      */
-    private function transformSections(array &$sections): void
+    private function transformSections(array &$sections, string $filename): void
     {
         /**
          * @var string $sectionName
@@ -135,6 +135,11 @@ final readonly class Parser
                         }
                     }
                     $content = $values;
+                    break;
+                case self::SECTION_FILE_EXTERNAL:
+                case self::SECTION_EXPECT_EXTERNAL:
+                case self::SECTION_EXPECTREGEX_EXTERNAL:
+                    $content = dirname($filename) . DIRECTORY_SEPARATOR . $content;
                     break;
             }
         }

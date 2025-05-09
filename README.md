@@ -19,3 +19,51 @@ Advanced usage
 --------------
 
 To be added
+
+### Supported sections
+
+* --TEST--
+* --SKIPIF--
+* --STDIN--
+* --ARGS--
+* --ENV--
+* --FILE--
+* --XFAIL--
+* --FLAKY--
+* --EXPECT--
+* --CLEAN--
+
+### Implemented but not tested sections
+* --FILE_EXTERNAL--
+* --EXPECT_EXTERNAL--
+
+### Implemented but not working sections
+* --INI--
+
+### Parsed but not implemented sections
+
+* --CONFLICTS--
+* --EXTENSIONS--
+* --REDIRECTTEST--
+* --EXPECTHEADERS--
+* --EXPECTREGEX--
+* --EXPECTREGEX_EXTERNAL--
+
+### Ignored sections
+
+* --DESCRIPTION--
+* --CREDITS--
+* --WHITESPACE_SENSITIVE--
+* --CAPTURE_STDIO--
+* --POST--
+* --POST_RAW--
+* --PUT--
+* --GZIP_POST--
+* --DEFLATE_POST--
+* --GET--
+* --COOKIE--
+* --PHPDBG--
+* --FILEEOF--
+* --CGI--
+* --EXPECTF--
+* --EXPECTF_EXTERNAL--

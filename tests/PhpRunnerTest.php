@@ -46,5 +46,12 @@ final class PhpRunnerTest extends TestCase
             input: $parsedFile->input
         );
         $this->assertSame("first line" . PHP_EOL . "second line", $result);
+
+        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
+        $result = $runner->runCode(
+            $parsedFile->testCode,
+            iniSettings: $parsedFile->iniSettings
+        );
+        $this->assertSame("1", $result); // FIXME: should be 0
     }
 }

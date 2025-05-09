@@ -40,9 +40,15 @@ final readonly class Parser
         self::SECTION_ENV,
         self::SECTION_INI,
         self::SECTION_CONFLICTS,
+        self::SECTION_EXTENSIONS,
     ];
     private const array OPTIONAL_SECTIONS_STRING = [
+        self::SECTION_SKIPIF,
+        self::SECTION_STDIN,
         self::SECTION_ARGS,
+        self::SECTION_FILE,
+        self::SECTION_FILE_EXTERNAL,
+        self::SECTION_CLEAN,
     ];
     private const array OPTIONAL_SECTIONS_BOOLEAN = [
         self::SECTION_XFAIL, self::SECTION_FLAKY,

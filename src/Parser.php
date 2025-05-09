@@ -99,6 +99,7 @@ final readonly class Parser
                     $content = $values;
                     break;
                 case self::SECTION_CONFLICTS:
+                    $content = str_replace(PHP_EOL, "\n", $content);
                     $content = explode("\n", $content);
                     break;
             }

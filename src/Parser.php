@@ -64,6 +64,22 @@ final readonly class Parser
             }
         }
 
+        $this->transformSections($sections);
+        $this->addOptionalSections($sections);
+        $this->checkRequiredSections($sections, $filename);
+
+        return $sections;
+    }
+
+    /**
+     * @param array<string, string|array<string, mixed>> $sections
+     */
+    private function transformSections(array &$sections): void
+    {
+        /**
+         * @var string $sectionName
+         * @var string $content
+         */
         foreach ($sections as $sectionName => &$content) {
             $content = trim($content);
             switch ($sectionName) {
@@ -80,7 +96,13 @@ final readonly class Parser
                     break;
             }
         }
+    }
 
+    /**
+     * @param array<string, string|array<string, mixed>> $sections
+     */
+    private function addOptionalSections(array &$sections): void
+    {
         foreach (self::ARRAY_SECTIONS as $sectionName) {
             if (!isset($sections[$sectionName])) {
                 $sections[$sectionName] = [];
@@ -91,7 +113,13 @@ final readonly class Parser
                 $sections[$sectionName] = "";
             }
         }
+    }
 
+    /**
+     * @param array<string, string|array<string, mixed>> $sections
+     */
+    private function checkRequiredSections(array $sections, string $filename): void
+    {
         foreach (self::REQUIRED_SECTIONS as $requiredSection) {
             if (is_string($requiredSection)) {
                 if (!array_key_exists($requiredSection, $sections)) {
@@ -103,7 +131,5 @@ final readonly class Parser
                 }
             }
         }
-
-        return $sections;
     }
 }

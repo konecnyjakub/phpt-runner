@@ -39,8 +39,6 @@ To be added
 * --FILE_EXTERNAL--
 * --EXPECT_EXTERNAL--
 
-### Implemented but not working sections
-
 ### Parsed but not implemented sections
 
 * --CONFLICTS--

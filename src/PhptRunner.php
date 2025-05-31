@@ -13,6 +13,17 @@ final readonly class PhptRunner
     {
         $parsedFile = $this->parser->parse($fileName);
 
+        if ($parsedFile->requiresCgiBinary && !$this->phpRunner->isCgiBinary()) {
+            return new FileResultSet(
+                $fileName,
+                $parsedFile->testName,
+                $parsedFile->testDescription,
+                Outcome::Skipped,
+                "This test requires the cgi binary.",
+                ""
+            );
+        }
+
         if ($parsedFile->skipCode !== "") {
             $skipResult = $this->phpRunner->runCode($parsedFile->skipCode);
             if (str_starts_with($skipResult, "skip")) {

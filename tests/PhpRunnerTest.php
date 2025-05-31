@@ -9,6 +9,11 @@ use MyTester\TestCase;
 #[TestSuite("PHP code runner")]
 final class PhpRunnerTest extends TestCase
 {
+    public function testIsCgiBinary(): void
+    {
+        $runner = new PhpRunner();
+        $this->assertFalse($runner->isCgiBinary());
+    }
     public function testRunCode(): void
     {
         $runner = new PhpRunner();

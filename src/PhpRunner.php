@@ -12,6 +12,12 @@ final readonly class PhpRunner
     {
     }
 
+    public function isCgiBinary(): bool
+    {
+        $output = $this->runCode("<?php echo PHP_SAPI; ?>");
+        return str_contains($output, "cgi");
+    }
+
     /**
      * @param array<string, string|int|float> $iniSettings
      * @param array<string, string|int|float> $env

@@ -30,6 +30,7 @@ To be added
 * --ARGS--
 * --ENV--
 * --FILE--
+* --CGI--
 * --XFAIL--
 * --FLAKY--
 * --EXPECT--
@@ -44,7 +45,6 @@ To be added
 * --CONFLICTS--
 * --EXTENSIONS--
 * --REDIRECTTEST--
-* --CGI--
 * --EXPECTHEADERS--
 * --EXPECTF--
 * --EXPECTF_EXTERNAL--

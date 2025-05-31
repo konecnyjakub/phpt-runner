@@ -20,6 +20,7 @@ final readonly class Parser
     public const string SECTION_ARGS = "ARGS";
     public const string SECTION_ENV = "ENV";
     public const string SECTION_FILE = "FILE";
+    public const string SECTION_FILEEOF = "FILEEOF";
     public const string SECTION_FILE_EXTERNAL = "FILE_EXTERNAL";
     public const string SECTION_REDIRECTTEST = "REDIRECTTEST";
     public const string SECTION_CGI = "CGI";
@@ -36,7 +37,7 @@ final readonly class Parser
 
     private const array REQUIRED_SECTIONS = [
         self::SECTION_TEST,
-        [self::SECTION_FILE, self::SECTION_FILE_EXTERNAL, self::SECTION_REDIRECTTEST, ],
+        [self::SECTION_FILE, self::SECTION_FILEEOF, self::SECTION_FILE_EXTERNAL, self::SECTION_REDIRECTTEST, ],
         [self::SECTION_EXPECT, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTREGEX, self::SECTION_EXPECTREGEX_EXTERNAL, ],
     ];
 
@@ -52,6 +53,7 @@ final readonly class Parser
         self::SECTION_STDIN,
         self::SECTION_ARGS,
         self::SECTION_FILE,
+        self::SECTION_FILEEOF,
         self::SECTION_FILE_EXTERNAL,
         self::SECTION_CLEAN,
     ];
@@ -92,7 +94,7 @@ final readonly class Parser
         $result->iniSettings = $sections[self::SECTION_INI]; // @phpstan-ignore assign.propertyType
         $result->arguments = $sections[self::SECTION_ARGS]; // @phpstan-ignore assign.propertyType
         $result->envVariables = $sections[self::SECTION_ENV]; // @phpstan-ignore assign.propertyType
-        $result->testCode = $sections[self::SECTION_FILE]; // @phpstan-ignore assign.propertyType
+        $result->testCode = $sections[self::SECTION_FILEEOF] !== "" ? $sections[self::SECTION_FILEEOF] : $sections[self::SECTION_FILE]; // @phpstan-ignore assign.propertyType
         $result->testFile = $sections[self::SECTION_FILE_EXTERNAL]; // @phpstan-ignore assign.propertyType
         $result->testRedirects = $sections[self::SECTION_REDIRECTTEST] ?? []; // @phpstan-ignore assign.propertyType
         $result->requiresCgiBinary = $sections[self::SECTION_CGI] !== false;
@@ -152,6 +154,10 @@ final readonly class Parser
                 case self::SECTION_EXPECTF_EXTERNAL:
                 case self::SECTION_EXPECTREGEX_EXTERNAL:
                     $content = dirname($filename) . DIRECTORY_SEPARATOR . $content;
+                    break;
+                case self::SECTION_FILEEOF:
+                    $content = (string) preg_replace("/\n$/m", "", $content);
+                    $content = preg_replace("/\r\n$/m", "", $content);
                     break;
             }
         }

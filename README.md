@@ -37,6 +37,7 @@ To be added
 * --CLEAN--
 
 ### Implemented but not tested sections
+* --FILEEOF--
 * --FILE_EXTERNAL--
 * --EXPECT_EXTERNAL--
 
@@ -64,4 +65,3 @@ To be added
 * --GET--
 * --COOKIE--
 * --PHPDBG--
-* --FILEEOF--

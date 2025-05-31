@@ -63,7 +63,7 @@ final readonly class Parser
         self::SECTION_FLAKY,
     ];
 
-    public function parse(string $filename): ParsedFile
+    public function parse(string $filename, bool $checkRequiredSections = true): ParsedFile
     {
         $lines = @file($filename);
         if ($lines === false) {
@@ -72,7 +72,7 @@ final readonly class Parser
 
         $sections = [];
         foreach ($lines as $line) {
-            if (preg_match("/^--([A-Z]+)--/", $line, $matches) === 1) {
+            if (preg_match("/^--([A-Z_]+)--/", $line, $matches) === 1) {
                 $section = $matches[1];
                 $sections[$section] = "";
             } elseif (isset($section)) {
@@ -82,7 +82,9 @@ final readonly class Parser
 
         $this->transformSections($sections, $filename);
         $this->addOptionalSections($sections);
-        $this->checkRequiredSections($sections, $filename);
+        if ($checkRequiredSections) {
+            $this->checkRequiredSections($sections, $filename);
+        }
 
         $result = new ParsedFile();
         $result->testName = $sections[self::SECTION_TEST]; // @phpstan-ignore assign.propertyType

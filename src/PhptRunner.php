@@ -39,7 +39,7 @@ final readonly class PhptRunner
         }
 
         $output = $this->phpRunner->runCode(
-            $parsedFile->testFile !== "" ? $parsedFile->testFile : $parsedFile->testCode,
+            $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
             $parsedFile->iniSettings,
             $parsedFile->envVariables,
             $parsedFile->arguments,
@@ -52,16 +52,15 @@ final readonly class PhptRunner
         $success = true;
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
             $expectedOutput = "";
-            if ($parsedFile->expectedText !== "") {
-                $expectedOutput = $parsedFile->expectedText;
-                $success = ($output === $parsedFile->expectedText);
-            }
             if ($parsedFile->expectedTextFile !== "") {
                 $contents = @file_get_contents($parsedFile->expectedTextFile);
                 $success = $success && $contents !== false && $output === $contents;
                 if ($contents !== false) {
-                    $expectedOutput .= PHP_EOL . $contents;
+                    $expectedOutput = $contents;
                 }
+            } elseif ($parsedFile->expectedText !== "") {
+                $expectedOutput = $parsedFile->expectedText;
+                $success = ($output === $parsedFile->expectedText);
             }
 
             if ($success || $parsedFile->flaky !== false) {

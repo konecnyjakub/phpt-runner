@@ -30,16 +30,16 @@ To be added
 * --ARGS--
 * --ENV--
 * --FILE--
+* --FILE_EXTERNAL--
 * --CGI--
 * --XFAIL--
 * --FLAKY--
 * --EXPECT--
+* --EXPECT_EXTERNAL--
 * --CLEAN--
 
 ### Implemented but not tested sections
 * --FILEEOF--
-* --FILE_EXTERNAL--
-* --EXPECT_EXTERNAL--
 
 ### Parsed but not implemented sections
 

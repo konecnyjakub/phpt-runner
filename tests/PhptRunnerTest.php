@@ -121,5 +121,14 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertSame("This test requires the cgi binary.", $result->output);
         $this->assertSame("", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_external.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test external", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Passed, $result->outcome);
+        $this->assertSame("test123", $result->output);
+        $this->assertSame("test123", $result->expectedOutput);
     }
 }

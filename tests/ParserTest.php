@@ -319,6 +319,31 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_external.phpt", false);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("Test external", $result->testName);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("", $result->testCode);
+        $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_script.php", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("", $result->expectedText);
+        $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_output.txt", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);

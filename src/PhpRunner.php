@@ -33,7 +33,8 @@ final readonly class PhpRunner
         array $iniSettings = [],
         array $env = [],
         string $arguments = "",
-        string $input = ""
+        string $input = "",
+        ?string $workingDirectory = null
     ): string {
         $file = tmpfile();
         $filename = stream_get_meta_data($file)['uri'];
@@ -52,7 +53,7 @@ final readonly class PhpRunner
             1 => ["pipe", "w"],
             2 => ["redirect", 1],
         ];
-        $process = proc_open($commandLine, $pipesSpec, $pipes, null, $env);
+        $process = proc_open($commandLine, $pipesSpec, $pipes, $workingDirectory, $env);
         if ($process === false) {
             return "";
         }

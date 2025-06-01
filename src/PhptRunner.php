@@ -59,7 +59,8 @@ final readonly class PhptRunner
                 $parsedFile->iniSettings,
                 $parsedFile->envVariables,
                 $parsedFile->arguments,
-                $parsedFile->input
+                $parsedFile->input,
+                dirname($fileName)
             );
             $success = $output === $expectedOutput;
 
@@ -73,7 +74,7 @@ final readonly class PhptRunner
         }
 
         if ($parsedFile->cleanCode !== "") {
-            $this->phpRunner->runCode($parsedFile->cleanCode);
+            $this->phpRunner->runCode($parsedFile->cleanCode, workingDirectory: dirname($fileName));
         }
 
         return new FileResultSet(

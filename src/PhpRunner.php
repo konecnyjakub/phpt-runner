@@ -59,6 +59,9 @@ final readonly class PhpRunner
         $output = (string) stream_get_contents($pipes[1]);
         fclose($pipes[1]);
         proc_close($process);
+        if (str_ends_with($output, PHP_EOL)) {
+            $output = rtrim($output, PHP_EOL);
+        }
         return $output;
     }
 }

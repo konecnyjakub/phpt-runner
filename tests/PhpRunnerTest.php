@@ -36,7 +36,7 @@ final class PhpRunnerTest extends TestCase
             $parsedFile->testCode,
             arguments: $parsedFile->arguments
         );
-        $this->assertSame("bool(true)\n", $result);
+        $this->assertSame("bool(true)", $result);
 
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
         $result = $runner->runCode(

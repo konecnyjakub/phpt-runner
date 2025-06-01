@@ -51,17 +51,16 @@ final readonly class PhptRunner
             );
         }
 
-        $output = $this->phpRunner->runCode(
-            $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
-            $parsedFile->iniSettings,
-            $parsedFile->envVariables,
-            $parsedFile->arguments,
-            $parsedFile->input
-        );
-
         $success = true;
         $expectedOutput = $this->getExpectedOutput($parsedFile);
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
+            $output = $this->phpRunner->runCode(
+                $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
+                $parsedFile->iniSettings,
+                $parsedFile->envVariables,
+                $parsedFile->arguments,
+                $parsedFile->input
+            );
             $success = $output === $expectedOutput;
 
             if ($success || $parsedFile->flaky !== false) {
@@ -69,8 +68,8 @@ final readonly class PhptRunner
             }
         }
 
-        if (!$success && $parsedFile->supposedToFail !== false) {
-            $success = true;
+        if ($parsedFile->supposedToFail !== false) {
+            $success = !$success;
         }
 
         if ($parsedFile->cleanCode !== "") {
@@ -82,7 +81,7 @@ final readonly class PhptRunner
             $parsedFile->testName,
             $parsedFile->testDescription,
             $success ? Outcome::Passed : Outcome::Failed,
-            $output,
+            $output, // @phpstan-ignore variable.undefined
             $expectedOutput
         );
     }

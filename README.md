@@ -30,6 +30,7 @@ To be added
 * --ARGS--
 * --ENV--
 * --FILE--
+* --FILEEOF--
 * --FILE_EXTERNAL--
 * --CGI--
 * --XFAIL--
@@ -37,9 +38,6 @@ To be added
 * --EXPECT--
 * --EXPECT_EXTERNAL--
 * --CLEAN--
-
-### Implemented but not tested sections
-* --FILEEOF--
 
 ### Parsed but not implemented sections
 

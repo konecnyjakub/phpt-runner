@@ -344,6 +344,31 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_fileeof.phpt");
+        $this->assertSame("Test fileeof", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "//last line comment", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test123", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);

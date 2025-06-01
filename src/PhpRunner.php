@@ -18,6 +18,12 @@ final readonly class PhpRunner
         return str_contains($output, "cgi");
     }
 
+    public function isExtensionLoaded(string $extensionName): bool
+    {
+        $output = $this->runCode("<?php var_dump(extension_loaded(\"$extensionName\")); ?>");
+        return $output === "bool(true)";
+    }
+
     /**
      * @param array<string, string|int|float> $iniSettings
      * @param array<string, string|int|float> $env

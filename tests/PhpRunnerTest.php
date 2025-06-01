@@ -14,6 +14,14 @@ final class PhpRunnerTest extends TestCase
         $runner = new PhpRunner();
         $this->assertFalse($runner->isCgiBinary());
     }
+
+    public function testIsExtensionLoaded(): void
+    {
+        $runner = new PhpRunner();
+        $this->assertTrue($runner->isExtensionLoaded("json"));
+        $this->assertFalse($runner->isExtensionLoaded("abc"));
+    }
+
     public function testRunCode(): void
     {
         $runner = new PhpRunner();

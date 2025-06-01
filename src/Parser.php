@@ -157,10 +157,6 @@ final readonly class Parser
                 case self::SECTION_EXPECTREGEX_EXTERNAL:
                     $content = dirname($filename) . DIRECTORY_SEPARATOR . $content;
                     break;
-                case self::SECTION_FILEEOF:
-                    $content = (string) preg_replace("/\n$/m", "", $content);
-                    $content = preg_replace("/\r\n$/m", "", $content);
-                    break;
             }
         }
     }

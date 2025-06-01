@@ -65,9 +65,8 @@ final readonly class PhpRunner
         $output = (string) stream_get_contents($pipes[1]);
         fclose($pipes[1]);
         proc_close($process);
-        if (str_ends_with($output, PHP_EOL)) {
-            $output = rtrim($output, PHP_EOL);
-        }
+        $output = (string) preg_replace("/\n$/m", "", $output);
+        $output = (string) preg_replace("/\r\n$/m", "", $output);
         return $output;
     }
 }

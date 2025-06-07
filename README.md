@@ -20,7 +20,7 @@ Advanced usage
 
 To be added
 
-### Supported sections
+### Fully implemented and tested sections
 
 * --TEST--
 * --DESCRIPTION--
@@ -39,10 +39,12 @@ To be added
 * --EXPECT_EXTERNAL--
 * --CLEAN--
 
+### Partially implemented sections
+* --EXTENSIONS--
+
 ### Parsed but not implemented sections
 
 * --CONFLICTS--
-* --EXTENSIONS--
 * --REDIRECTTEST--
 * --EXPECTHEADERS--
 * --EXPECTF--

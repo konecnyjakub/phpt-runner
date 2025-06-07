@@ -22,6 +22,12 @@ final readonly class PhptRunner
             }
         }
 
+        foreach ($parsedFile->requiredExtensions as $extension) {
+            if (!$this->phpRunner->isExtensionLoaded($extension)) {
+                return "This test requires PHP extension $extension.";
+            }
+        }
+
         return null;
     }
 

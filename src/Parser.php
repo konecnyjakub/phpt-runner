@@ -173,25 +173,13 @@ final readonly class Parser
             if (in_array($sectionName, self::SINGLE_LINE_SECTIONS, true)) {
                 $content = explode(PHP_EOL, $content, 2)[0];
             }
-            switch ($sectionName) {
-                case self::SECTION_ENV:
-                case self::SECTION_INI:
-                    $content = $this->transformConfigToArray($content);
-                    break;
-                case self::SECTION_CONFLICTS:
-                case self::SECTION_EXTENSIONS:
-                    $content = $this->transformToArray($content);
-                    break;
-                case self::SECTION_EXPECTHEADERS:
-                    $content = $this->transformHeadersToArray($content);
-                    break;
-                case self::SECTION_FILE_EXTERNAL:
-                case self::SECTION_EXPECT_EXTERNAL:
-                case self::SECTION_EXPECTF_EXTERNAL:
-                case self::SECTION_EXPECTREGEX_EXTERNAL:
-                    $content = dirname($filename) . DIRECTORY_SEPARATOR . $content;
-                    break;
-            }
+            $content = match ($sectionName) {
+                self::SECTION_ENV, self::SECTION_INI => $this->transformConfigToArray($content),
+                self::SECTION_CONFLICTS, self::SECTION_EXTENSIONS => $this->transformToArray($content),
+                self::SECTION_EXPECTHEADERS => $this->transformHeadersToArray($content),
+                self::SECTION_FILE_EXTERNAL, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTF_EXTERNAL, self::SECTION_EXPECTREGEX_EXTERNAL => $content = dirname($filename) . DIRECTORY_SEPARATOR . $content,
+                default => $content,
+            };
         }
     }
 

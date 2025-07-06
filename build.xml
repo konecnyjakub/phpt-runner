@@ -49,11 +49,13 @@
                     <arg value="junit"/>
                     <arg value="--coverageFormat"/>
                     <arg value="cobertura"/>
+                    <arg value="--noPhpt"/>
                 </exec>
             </then>
             <else>
                 <exec executable="vendor/bin/mytester" logoutput="true" passthru="true" checkreturn="true">
                     <arg value="--colors"/>
+                    <arg value="--noPhpt"/>
                 </exec>
             </else>
         </if>

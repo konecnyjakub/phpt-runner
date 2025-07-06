@@ -1,5 +1,6 @@
 --TEST--
 Test
+Second line of name is ignored
 --DESCRIPTION--
 Just a basic test
 --FILE--

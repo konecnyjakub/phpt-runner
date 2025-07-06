@@ -63,6 +63,12 @@ final readonly class Parser
         self::SECTION_FLAKY,
     ];
 
+    private const array SINGLE_LINE_SECTIONS = [
+        self::SECTION_TEST,
+        self::SECTION_ARGS,
+        self::SECTION_FILE_EXTERNAL,
+    ];
+
     public function parse(string $filename, bool $checkRequiredSections = true): ParsedFile
     {
         $lines = @file($filename);
@@ -125,6 +131,9 @@ final readonly class Parser
          */
         foreach ($sections as $sectionName => &$content) {
             $content = trim($content);
+            if (in_array($sectionName, self::SINGLE_LINE_SECTIONS, true)) {
+                $content = explode(PHP_EOL, $content, 2)[0];
+            }
             switch ($sectionName) {
                 case self::SECTION_ENV:
                 case self::SECTION_INI:

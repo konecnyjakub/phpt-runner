@@ -121,6 +121,45 @@ final readonly class Parser
     }
 
     /**
+     * @return string[]
+     */
+    private function transformToArray(string $value): array
+    {
+        $value = str_replace(PHP_EOL, "\n", $value);
+        return explode("\n", $value);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function transformConfigToArray(string $value): array
+    {
+        $values = [];
+        foreach (explode("\n", $value) as $line) {
+            $value = explode("=", $line, 2);
+            if ($value[0] !== "" && isset($value[1])) {
+                $values[$value[0]] = $value[1];
+            }
+        }
+        return $values;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function transformHeadersToArray(string $value): array
+    {
+        $values = [];
+        foreach (explode("\n", $value) as $line) {
+            $value = explode(":", $line, 2);
+            if ($value[0] !== "" && isset($value[1])) {
+                $values[$value[0]] = trim($value[1]);
+            }
+        }
+        return $values;
+    }
+
+    /**
      * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function transformSections(array &$sections, string $filename): void
@@ -137,29 +176,14 @@ final readonly class Parser
             switch ($sectionName) {
                 case self::SECTION_ENV:
                 case self::SECTION_INI:
-                    $values = [];
-                    foreach (explode("\n", $content) as $line) {
-                        $value = explode("=", $line, 2);
-                        if ($value[0] !== "" && isset($value[1])) {
-                            $values[$value[0]] = $value[1];
-                        }
-                    }
-                    $content = $values;
+                    $content = $this->transformConfigToArray($content);
                     break;
                 case self::SECTION_CONFLICTS:
                 case self::SECTION_EXTENSIONS:
-                    $content = str_replace(PHP_EOL, "\n", $content);
-                    $content = explode("\n", $content);
+                    $content = $this->transformToArray($content);
                     break;
                 case self::SECTION_EXPECTHEADERS:
-                    $values = [];
-                    foreach (explode("\n", $content) as $line) {
-                        $value = explode(":", $line, 2);
-                        if ($value[0] !== "" && isset($value[1])) {
-                            $values[$value[0]] = trim($value[1]);
-                        }
-                    }
-                    $content = $values;
+                    $content = $this->transformHeadersToArray($content);
                     break;
                 case self::SECTION_FILE_EXTERNAL:
                 case self::SECTION_EXPECT_EXTERNAL:

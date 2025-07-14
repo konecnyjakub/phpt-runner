@@ -150,5 +150,23 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertSame("This test requires PHP extension abc.", $result->output);
         $this->assertSame("", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test get", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Skipped, $result->outcome);
+        $this->assertSame("This test requires the cgi binary.", $result->output);
+        $this->assertSame("", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_cookies.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test cookies", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Skipped, $result->outcome);
+        $this->assertSame("This test requires the cgi binary.", $result->output);
+        $this->assertSame("", $result->expectedOutput);
     }
 }

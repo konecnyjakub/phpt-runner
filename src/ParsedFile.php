@@ -12,6 +12,10 @@ final class ParsedFile
     public array $conflictingKeys = [];
     /** @var string[] */
     public array $requiredExtensions = [];
+    /** @var mixed[] */
+    public array $getData = [];
+    /** @var mixed[] */
+    public array $cookies = [];
     public string $input = "";
     /** @var array<string, string> */
     public array $iniSettings = [];

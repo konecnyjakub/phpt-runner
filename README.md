@@ -46,6 +46,8 @@ These sections work exactly as described in the documentation. If you notice any
 These sections are used by PhptRunner but there are some differences from behavior described in the documentation. We want to eventually eliminate the differences.
 
 * --EXTENSIONS-- (we do not try to load those extensions, we just skip the test if any of those extensions is not loaded)
+* --GET-- (it forces the use of the cgi binary but is not passed to it)
+* --COOKIE-- (it forces the use of the cgi binary but is not passed to it)
 
 ### Parsed but not implemented sections
 
@@ -71,6 +73,4 @@ These sections are completely ignored by both Parser and PhptRunner right now. T
 * --PUT--
 * --GZIP_POST--
 * --DEFLATE_POST--
-* --GET--
-* --COOKIE--
 * --PHPDBG--

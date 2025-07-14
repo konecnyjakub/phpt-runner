@@ -15,6 +15,8 @@ final readonly class Parser
     public const string SECTION_SKIPIF = "SKIPIF";
     public const string SECTION_CONFLICTS = "CONFLICTS";
     public const string SECTION_EXTENSIONS = "EXTENSIONS";
+    public const string SECTION_GET = "GET";
+    public const string SECTION_COOKIE = "COOKIE";
     public const string SECTION_STDIN = "STDIN";
     public const string SECTION_INI = "INI";
     public const string SECTION_ARGS = "ARGS";
@@ -46,6 +48,8 @@ final readonly class Parser
         self::SECTION_INI,
         self::SECTION_CONFLICTS,
         self::SECTION_EXTENSIONS,
+        self::SECTION_GET,
+        self::SECTION_COOKIE,
     ];
     private const array OPTIONAL_SECTIONS_STRING = [
         self::SECTION_DESCRIPTION,
@@ -65,8 +69,15 @@ final readonly class Parser
 
     private const array SINGLE_LINE_SECTIONS = [
         self::SECTION_TEST,
+        self::SECTION_GET,
+        self::SECTION_COOKIE,
         self::SECTION_ARGS,
         self::SECTION_FILE_EXTERNAL,
+    ];
+
+    private const array IMPLIED_CGI_SECTIONS = [
+        self::SECTION_GET,
+        self::SECTION_COOKIE,
     ];
 
     public function parse(string $filename, bool $checkRequiredSections = true): ParsedFile
@@ -98,6 +109,8 @@ final readonly class Parser
         $result->skipCode = $sections[self::SECTION_SKIPIF]; // @phpstan-ignore assign.propertyType
         $result->conflictingKeys = $sections[self::SECTION_CONFLICTS]; // @phpstan-ignore assign.propertyType
         $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
+        $result->getData = $sections[self::SECTION_GET]; // @phpstan-ignore assign.propertyType
+        $result->cookies = $sections[self::SECTION_COOKIE]; // @phpstan-ignore assign.propertyType
         $result->input = $sections[self::SECTION_STDIN]; // @phpstan-ignore assign.propertyType
         $result->iniSettings = $sections[self::SECTION_INI]; // @phpstan-ignore assign.propertyType
         $result->arguments = $sections[self::SECTION_ARGS]; // @phpstan-ignore assign.propertyType
@@ -105,7 +118,7 @@ final readonly class Parser
         $result->testCode = $sections[self::SECTION_FILEEOF] !== "" ? $sections[self::SECTION_FILEEOF] : $sections[self::SECTION_FILE]; // @phpstan-ignore assign.propertyType
         $result->testFile = $sections[self::SECTION_FILE_EXTERNAL]; // @phpstan-ignore assign.propertyType
         $result->testRedirects = $sections[self::SECTION_REDIRECTTEST] ?? []; // @phpstan-ignore assign.propertyType
-        $result->requiresCgiBinary = $sections[self::SECTION_CGI] !== false;
+        $result->requiresCgiBinary = $this->isCgiRequired($sections);
         $result->supposedToFail = $sections[self::SECTION_XFAIL]; // @phpstan-ignore assign.propertyType
         $result->flaky = $sections[self::SECTION_FLAKY]; // @phpstan-ignore assign.propertyType
         $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS] ?? []; // @phpstan-ignore assign.propertyType
@@ -118,6 +131,22 @@ final readonly class Parser
         $result->cleanCode = $sections[self::SECTION_CLEAN]; // @phpstan-ignore assign.propertyType
 
         return $result;
+    }
+
+    /**
+     * @param mixed[] $sections
+     */
+    private function isCgiRequired(array $sections): bool
+    {
+        if ($sections[self::SECTION_CGI] !== false) {
+            return true;
+        }
+        foreach (self::IMPLIED_CGI_SECTIONS as $sectionName) {
+            if (is_array($sections[$sectionName]) && count($sections[$sectionName]) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -160,6 +189,31 @@ final readonly class Parser
     }
 
     /**
+     * @return mixed[]
+     */
+    private function transformGetToArray(string $value): array
+    {
+        parse_str($value, $result);
+        return $result;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function transformCookiesToArray(string $value): array
+    {
+        $values = [];
+        $cookies = explode(";", $value);
+        foreach ($cookies as $cookie) {
+            $value = explode("=", $cookie, 2);
+            if ($value[0] !== "" && isset($value[1])) {
+                $values[$value[0]] = $value[1];
+            }
+        }
+        return $values;
+    }
+
+    /**
      * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function transformSections(array &$sections, string $filename): void
@@ -178,6 +232,8 @@ final readonly class Parser
                 self::SECTION_CONFLICTS, self::SECTION_EXTENSIONS => $this->transformToArray($content),
                 self::SECTION_EXPECTHEADERS => $this->transformHeadersToArray($content),
                 self::SECTION_FILE_EXTERNAL, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTF_EXTERNAL, self::SECTION_EXPECTREGEX_EXTERNAL => $content = dirname($filename) . DIRECTORY_SEPARATOR . $content,
+                self::SECTION_GET => $this->transformGetToArray($content),
+                self::SECTION_COOKIE => $this->transformCookiesToArray($content),
                 default => $content,
             };
         }

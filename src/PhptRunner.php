@@ -31,16 +31,6 @@ final readonly class PhptRunner
         return null;
     }
 
-    private function getExpectedOutput(ParsedFile $parsedFile): string
-    {
-        if ($parsedFile->expectedTextFile !== "") {
-            return (string) @file_get_contents($parsedFile->expectedTextFile);
-        } elseif ($parsedFile->expectedText !== "") {
-            return $parsedFile->expectedText;
-        }
-        return "";
-    }
-
     public function runFile(string $fileName): FileResultSet
     {
         $parsedFile = $this->parser->parse($fileName);
@@ -58,7 +48,7 @@ final readonly class PhptRunner
         }
 
         $success = true;
-        $expectedOutput = $this->getExpectedOutput($parsedFile);
+        $outputMatcher = new OutputMatcher($parsedFile);
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
             $output = $this->phpRunner->runCode(
                 $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
@@ -68,7 +58,7 @@ final readonly class PhptRunner
                 $parsedFile->input,
                 dirname($fileName)
             );
-            $success = $output === $expectedOutput;
+            $success = $outputMatcher->matches($output);
 
             if ($success || $parsedFile->flaky !== false) {
                 break;
@@ -89,7 +79,7 @@ final readonly class PhptRunner
             $parsedFile->testDescription,
             $success ? Outcome::Passed : Outcome::Failed,
             $output, // @phpstan-ignore variable.undefined
-            $expectedOutput
+            $outputMatcher->getExpectedOutput()
         );
     }
 }

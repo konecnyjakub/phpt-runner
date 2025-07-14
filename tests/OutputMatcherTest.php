@@ -24,6 +24,21 @@ final class OutputMatcherTest extends TestCase
         $this->assertSame("test123", $outputMatcher->getExpectedOutput());
     }
 
+    public function testGetMode(): void
+    {
+        $outputMatcher = new OutputMatcher(new ParsedFile());
+        $this->assertSame(OutputMatcherMode::Literal, $outputMatcher->getMode());
+
+        $parsedFile = new ParsedFile();
+        $parsedFile->expectedText = "abc";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame(OutputMatcherMode::Literal, $outputMatcher->getMode());
+
+        $parsedFile->expectedTextFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output.txt";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame(OutputMatcherMode::Literal, $outputMatcher->getMode());
+    }
+
     public function testMatches(): void
     {
         $outputMatcher = new OutputMatcher(new ParsedFile());

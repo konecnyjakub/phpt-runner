@@ -19,8 +19,19 @@ final readonly class OutputMatcher
         return "";
     }
 
+    public function getMode(): OutputMatcherMode
+    {
+        return match (true) {
+            $this->parsedFile->expectedPatternFile !== "" || $this->parsedFile->expectedPattern !== "" => OutputMatcherMode::Special,
+            $this->parsedFile->expectedRegexFile !== "" || $this->parsedFile->expectedRegex !== "" => OutputMatcherMode::Regex,
+            default => OutputMatcherMode::Literal,
+        };
+    }
+
     public function matches(string $actualOutput): bool
     {
-        return $actualOutput === $this->getExpectedOutput();
+        return match ($this->getMode()) {
+            default => $actualOutput === $this->getExpectedOutput(),
+        };
     }
 }

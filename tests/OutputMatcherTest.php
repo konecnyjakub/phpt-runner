@@ -22,6 +22,14 @@ final class OutputMatcherTest extends TestCase
         $parsedFile->expectedTextFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output.txt";
         $outputMatcher = new OutputMatcher($parsedFile);
         $this->assertSame("test123", $outputMatcher->getExpectedOutput());
+
+        $parsedFile->expectedRegex = "test[0-9]+";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame("test[0-9]+", $outputMatcher->getExpectedOutput());
+
+        $parsedFile->expectedRegexFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output_regex.txt";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame("test[0-9]+ext", $outputMatcher->getExpectedOutput());
     }
 
     public function testGetMode(): void
@@ -37,6 +45,14 @@ final class OutputMatcherTest extends TestCase
         $parsedFile->expectedTextFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output.txt";
         $outputMatcher = new OutputMatcher($parsedFile);
         $this->assertSame(OutputMatcherMode::Literal, $outputMatcher->getMode());
+
+        $parsedFile->expectedRegex = "test[0-9]+";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame(OutputMatcherMode::Regex, $outputMatcher->getMode());
+
+        $parsedFile->expectedRegexFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output_regex.txt";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertSame(OutputMatcherMode::Regex, $outputMatcher->getMode());
     }
 
     public function testMatches(): void
@@ -58,5 +74,18 @@ final class OutputMatcherTest extends TestCase
         $this->assertFalse($outputMatcher->matches(""));
         $this->assertFalse($outputMatcher->matches("abc"));
         $this->assertTrue($outputMatcher->matches("test123"));
+
+        $parsedFile->expectedRegex = "test[0-9]+";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertFalse($outputMatcher->matches(""));
+        $this->assertFalse($outputMatcher->matches("abc"));
+        $this->assertTrue($outputMatcher->matches("test123"));
+
+        $parsedFile->expectedRegexFile = __DIR__ . DIRECTORY_SEPARATOR . "test_external_output_regex.txt";
+        $outputMatcher = new OutputMatcher($parsedFile);
+        $this->assertFalse($outputMatcher->matches(""));
+        $this->assertFalse($outputMatcher->matches("abc"));
+        $this->assertFalse($outputMatcher->matches("test123"));
+        $this->assertTrue($outputMatcher->matches("test123ext"));
     }
 }

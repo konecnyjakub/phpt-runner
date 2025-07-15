@@ -39,6 +39,8 @@ These sections work exactly as described in the documentation. If you notice any
 * --FLAKY--
 * --EXPECT--
 * --EXPECT_EXTERNAL--
+* --EXPECTREGEX--
+* --EXPECTREGEX_EXTERNAL--
 * --CLEAN--
 
 ### Partially implemented sections
@@ -58,8 +60,6 @@ These sections are parsed by Parser and returned in ParsedFile but PhptRunner do
 * --EXPECTHEADERS--
 * --EXPECTF--
 * --EXPECTF_EXTERNAL--
-* --EXPECTREGEX--
-* --EXPECTREGEX_EXTERNAL--
 
 ### Ignored sections
 

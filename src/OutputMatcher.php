@@ -11,7 +11,11 @@ final readonly class OutputMatcher
 
     public function getExpectedOutput(): string
     {
-        if ($this->parsedFile->expectedTextFile !== "") {
+        if ($this->parsedFile->expectedRegexFile !== "") {
+            return (string) @file_get_contents($this->parsedFile->expectedRegexFile);
+        } elseif ($this->parsedFile->expectedRegex !== "") {
+            return $this->parsedFile->expectedRegex;
+        } elseif ($this->parsedFile->expectedTextFile !== "") {
             return (string) @file_get_contents($this->parsedFile->expectedTextFile);
         } elseif ($this->parsedFile->expectedText !== "") {
             return $this->parsedFile->expectedText;
@@ -30,8 +34,10 @@ final readonly class OutputMatcher
 
     public function matches(string $actualOutput): bool
     {
+        $expectedOutput = $this->getExpectedOutput();
         return match ($this->getMode()) {
-            default => $actualOutput === $this->getExpectedOutput(),
+            OutputMatcherMode::Regex => (bool) preg_match("/^$expectedOutput\$/s", $actualOutput),
+            default => $actualOutput === $expectedOutput,
         };
     }
 }

@@ -1,2 +1,2 @@
-[test_external_output.txt]
+[{test_external_output.txt,test_external_output_regex.txt}]
 insert_final_newline = false

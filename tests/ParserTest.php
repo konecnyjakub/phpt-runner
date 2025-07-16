@@ -32,6 +32,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -62,6 +63,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -92,6 +94,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -122,6 +125,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -152,6 +156,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -182,6 +187,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -212,6 +218,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(true, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -242,6 +249,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame("This is random", $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -272,6 +280,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -305,6 +314,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame(
@@ -338,6 +348,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -368,6 +379,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -398,6 +410,7 @@ final class ParserTest extends TestCase
         $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_script.php", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -428,6 +441,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -458,6 +472,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -488,6 +503,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -518,6 +534,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -548,6 +565,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -578,6 +596,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
@@ -608,6 +627,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);

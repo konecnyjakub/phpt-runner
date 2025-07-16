@@ -47,6 +47,7 @@ These sections work exactly as described in the documentation. If you notice any
 
 These sections are used by PhptRunner but there are some differences from behavior described in the documentation. We want to eventually eliminate the differences.
 
+* --CAPTURE_STDIO-- (only space is supported as separator)
 * --EXTENSIONS-- (we do not try to load those extensions, we just skip the test if any of those extensions is not loaded)
 * --GET-- (it forces the use of the cgi binary but is not passed to it)
 * --COOKIE-- (it forces the use of the cgi binary but is not passed to it)
@@ -67,7 +68,6 @@ These sections are completely ignored by both Parser and PhptRunner right now. T
 
 * --CREDITS--
 * --WHITESPACE_SENSITIVE--
-* --CAPTURE_STDIO--
 * --POST--
 * --POST_RAW--
 * --PUT--

@@ -34,7 +34,9 @@ final readonly class PhpRunner
         array $env = [],
         string $arguments = "",
         string $input = "",
-        ?string $workingDirectory = null
+        ?string $workingDirectory = null,
+        bool $captureStdout = true,
+        bool $captureStderr = true
     ): string {
         $file = tmpfile();
         $filename = stream_get_meta_data($file)['uri'];
@@ -53,6 +55,15 @@ final readonly class PhpRunner
             1 => ["pipe", "w"],
             2 => ["redirect", 1],
         ];
+        if (!$captureStderr) {
+            $pipesSpec[2] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+        }
+        if (!$captureStdout) {
+            $pipesSpec[1] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+            if ($captureStderr) {
+                $pipesSpec[2] = ["pipe", "w"];
+            }
+        }
         $process = proc_open($commandLine, $pipesSpec, $pipes, $workingDirectory, $env);
         if ($process === false) {
             return "";
@@ -63,8 +74,17 @@ final readonly class PhpRunner
         }
         fclose($pipes[0]);
 
-        $output = (string) stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
+        $output = match (true) {
+            $captureStdout => (string) stream_get_contents($pipes[1]),
+            $captureStderr => (string) stream_get_contents($pipes[2]),
+            default => "",
+        };
+        if ($captureStdout) {
+            fclose($pipes[1]);
+        }
+        if ($captureStderr && !$captureStdout) {
+            fclose($pipes[2]);
+        }
         proc_close($process);
         $output = (string) preg_replace("/\n$/m", "", $output);
         $output = (string) preg_replace("/\r\n$/m", "", $output);

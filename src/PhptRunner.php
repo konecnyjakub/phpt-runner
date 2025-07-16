@@ -56,7 +56,9 @@ final readonly class PhptRunner
                 $parsedFile->envVariables,
                 $parsedFile->arguments,
                 $parsedFile->input,
-                dirname($fileName)
+                dirname($fileName),
+                $parsedFile->captureStdout,
+                $parsedFile->captureStderr
             );
             $success = $outputMatcher->matches($output);
 

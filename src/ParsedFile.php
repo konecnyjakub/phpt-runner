@@ -10,6 +10,9 @@ final class ParsedFile
     public string $skipCode = "";
     /** @var string[] */
     public array $conflictingKeys = [];
+    public bool $captureStdin = true;
+    public bool $captureStdout = true;
+    public bool $captureStderr = true;
     /** @var string[] */
     public array $requiredExtensions = [];
     /** @var mixed[] */

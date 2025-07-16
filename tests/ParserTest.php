@@ -18,6 +18,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("<?php echo \"skip\"; ?>", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -45,6 +48,9 @@ final class ParserTest extends TestCase
         $this->assertSame("Just a basic test", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -72,6 +78,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -99,6 +108,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -126,6 +138,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -153,6 +168,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -180,6 +198,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -207,6 +228,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -234,6 +258,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame(["one", "two", ], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -261,6 +288,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -294,6 +324,9 @@ final class ParserTest extends TestCase
         $this->assertSame("Test clean", $result->testName);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -321,6 +354,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -348,6 +384,9 @@ final class ParserTest extends TestCase
         $this->assertSame("Test external", $result->testName);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -375,6 +414,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -402,6 +444,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame(["json", "abc", ], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -429,6 +474,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame(["one" => "abc", "two" => ["def", "ghi", ], ], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -456,6 +504,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame(["one" => "abc", "two" => "def", ], $result->cookies);
@@ -483,6 +534,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -510,6 +564,9 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
         $this->assertSame([], $result->cookies);
@@ -530,6 +587,36 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedPatternFile);
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_output_regex.txt", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_capture_stdio.phpt");
+        $this->assertSame("Test capture stdio", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertFalse($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "fwrite(STDERR, \"test error\");" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("test error", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";

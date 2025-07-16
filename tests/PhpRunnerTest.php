@@ -38,6 +38,19 @@ final class PhpRunnerTest extends TestCase
             $result
         );
 
+        $code = "<?php echo \"test123\"; fwrite(STDERR, \"test error\"); ?>";
+        $result = $runner->runCode($code);
+        $this->assertSame("test123test error", $result);
+
+        $result = $runner->runCode($code, captureStdout: false);
+        $this->assertSame("test error", $result);
+
+        $result = $runner->runCode($code, captureStderr: false);
+        $this->assertSame("test123", $result);
+
+        $result = $runner->runCode($code, captureStdout: false, captureStderr: false);
+        $this->assertSame("", $result);
+
         $parser = new Parser();
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
         $result = $runner->runCode(

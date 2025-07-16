@@ -14,6 +14,7 @@ final readonly class Parser
     public const string SECTION_DESCRIPTION = "DESCRIPTION";
     public const string SECTION_SKIPIF = "SKIPIF";
     public const string SECTION_CONFLICTS = "CONFLICTS";
+    public const string SECTION_CAPTURE_STDIO = "CAPTURE_STDIO";
     public const string SECTION_EXTENSIONS = "EXTENSIONS";
     public const string SECTION_GET = "GET";
     public const string SECTION_COOKIE = "COOKIE";
@@ -36,6 +37,15 @@ final readonly class Parser
     public const string SECTION_EXPECTREGEX = "EXPECTREGEX";
     public const string SECTION_EXPECTREGEX_EXTERNAL = "EXPECTREGEX_EXTERNAL";
     public const string SECTION_CLEAN = "CLEAN";
+
+    public const string STREAM_STDIN = "STDIN";
+    public const string STREAM_STDOUT = "STDOUT";
+    public const string STREAM_STDERR = "STDERR";
+    public const array STREAMS = [
+        self::STREAM_STDIN,
+        self::STREAM_STDOUT,
+        self::STREAM_STDERR,
+    ];
 
     private const array REQUIRED_SECTIONS = [
         self::SECTION_TEST,
@@ -65,6 +75,12 @@ final readonly class Parser
         self::SECTION_CGI,
         self::SECTION_XFAIL,
         self::SECTION_FLAKY,
+    ];
+
+    private const array OPTIONAL_SECTIONS_SPECIAL_DEFAULT_VALUE = [
+        self::SECTION_CAPTURE_STDIO => [
+            self::STREAM_STDIN, self::STREAM_STDOUT, self::STREAM_STDERR,
+        ],
     ];
 
     private const array SINGLE_LINE_SECTIONS = [
@@ -108,6 +124,9 @@ final readonly class Parser
         $result->testDescription = $sections[self::SECTION_DESCRIPTION]; // @phpstan-ignore assign.propertyType
         $result->skipCode = $sections[self::SECTION_SKIPIF]; // @phpstan-ignore assign.propertyType
         $result->conflictingKeys = $sections[self::SECTION_CONFLICTS]; // @phpstan-ignore assign.propertyType
+        $result->captureStdin = in_array(self::STREAM_STDIN, $sections[self::SECTION_CAPTURE_STDIO], true); // @phpstan-ignore argument.type
+        $result->captureStdout = in_array(self::STREAM_STDOUT, $sections[self::SECTION_CAPTURE_STDIO], true); // @phpstan-ignore argument.type
+        $result->captureStderr = in_array(self::STREAM_STDERR, $sections[self::SECTION_CAPTURE_STDIO], true); // @phpstan-ignore argument.type
         $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
         $result->getData = $sections[self::SECTION_GET]; // @phpstan-ignore assign.propertyType
         $result->cookies = $sections[self::SECTION_COOKIE]; // @phpstan-ignore assign.propertyType
@@ -214,6 +233,21 @@ final readonly class Parser
     }
 
     /**
+     * @return string[]
+     */
+    private function transformCaptureStreamsToArray(string $value): array
+    {
+        $values = [];
+        $streams = explode(" ", $value);
+        foreach ($streams as $stream) {
+            if (in_array($stream, self::STREAMS, true)) {
+                $values[] = $stream;
+            }
+        }
+        return $values;
+    }
+
+    /**
      * @param array<string, string|bool|array<string, mixed>> $sections
      */
     private function transformSections(array &$sections, string $filename): void
@@ -234,13 +268,14 @@ final readonly class Parser
                 self::SECTION_FILE_EXTERNAL, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTF_EXTERNAL, self::SECTION_EXPECTREGEX_EXTERNAL => $content = dirname($filename) . DIRECTORY_SEPARATOR . $content,
                 self::SECTION_GET => $this->transformGetToArray($content),
                 self::SECTION_COOKIE => $this->transformCookiesToArray($content),
+                self::SECTION_CAPTURE_STDIO => $this->transformCaptureStreamsToArray($content),
                 default => $content,
             };
         }
     }
 
     /**
-     * @param array<string, string|bool|array<string, mixed>> $sections
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
      */
     private function addOptionalSections(array &$sections): void
     {
@@ -261,10 +296,15 @@ final readonly class Parser
                 $sections[$sectionName] = true;
             }
         }
+        foreach (self::OPTIONAL_SECTIONS_SPECIAL_DEFAULT_VALUE as $sectionName => $defaultValue) {
+            if (!isset($sections[$sectionName])) {
+                $sections[$sectionName] = $defaultValue;
+            }
+        }
     }
 
     /**
-     * @param array<string, string|bool|array<string, mixed>> $sections
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
      */
     private function checkRequiredSections(array $sections, string $filename): void
     {

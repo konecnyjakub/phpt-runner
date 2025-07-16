@@ -57,6 +57,7 @@ These sections are used by PhptRunner but there are some differences from behavi
 These sections are parsed by Parser and returned in ParsedFile but PhptRunner does not use them.
 
 * --CONFLICTS--
+* --PHPDBG--
 * --REDIRECTTEST--
 * --EXPECTHEADERS--
 * --EXPECTF--
@@ -73,4 +74,3 @@ These sections are completely ignored by both Parser and PhptRunner right now. T
 * --PUT--
 * --GZIP_POST--
 * --DEFLATE_POST--
-* --PHPDBG--

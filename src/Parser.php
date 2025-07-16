@@ -22,6 +22,7 @@ final readonly class Parser
     public const string SECTION_INI = "INI";
     public const string SECTION_ARGS = "ARGS";
     public const string SECTION_ENV = "ENV";
+    public const string SECTION_PHPDBG = "PHPDBG";
     public const string SECTION_FILE = "FILE";
     public const string SECTION_FILEEOF = "FILEEOF";
     public const string SECTION_FILE_EXTERNAL = "FILE_EXTERNAL";
@@ -60,6 +61,7 @@ final readonly class Parser
         self::SECTION_EXTENSIONS,
         self::SECTION_GET,
         self::SECTION_COOKIE,
+        self::SECTION_PHPDBG,
     ];
     private const array OPTIONAL_SECTIONS_STRING = [
         self::SECTION_DESCRIPTION,
@@ -138,6 +140,7 @@ final readonly class Parser
         $result->testFile = $sections[self::SECTION_FILE_EXTERNAL]; // @phpstan-ignore assign.propertyType
         $result->testRedirects = $sections[self::SECTION_REDIRECTTEST] ?? []; // @phpstan-ignore assign.propertyType
         $result->requiresCgiBinary = $this->isCgiRequired($sections);
+        $result->phpdbgCommands = $sections[self::SECTION_PHPDBG]; // @phpstan-ignore assign.propertyType
         $result->supposedToFail = $sections[self::SECTION_XFAIL]; // @phpstan-ignore assign.propertyType
         $result->flaky = $sections[self::SECTION_FLAKY]; // @phpstan-ignore assign.propertyType
         $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS] ?? []; // @phpstan-ignore assign.propertyType

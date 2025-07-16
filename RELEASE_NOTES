@@ -1,5 +1,5 @@
 A new version of PHPT runner is out. It changes parsing of sections TEST, ARGS and FILE_EXTERNAL: only the first line is read now (as required/recommended by the specification).
 
-Sections GET, and COOKIE are parsed now. Sections EXPECTREGEX, EXPECTREGEX_EXTERNAL and CAPTURE_STDIO are now used in PhptRunner.
+Sections GET, COOKIE and PHPDBG are parsed now. Sections EXPECTREGEX, EXPECTREGEX_EXTERNAL and CAPTURE_STDIO are now used in PhptRunner.
 
 For complete list of changes since previous version, see CHANGELOG.md.

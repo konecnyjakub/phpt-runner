@@ -30,6 +30,8 @@ final class ParsedFile
     /** @var mixed[] */
     public array $testRedirects = [];
     public bool $requiresCgiBinary = false;
+    /** @var string[] */
+    public array $phpdbgCommands = [];
     public bool|string $supposedToFail = false;
     public bool|string $flaky = false;
     /** @var array<string, string> */

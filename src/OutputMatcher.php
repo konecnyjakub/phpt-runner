@@ -26,7 +26,7 @@ final readonly class OutputMatcher
     public function getMode(): OutputMatcherMode
     {
         return match (true) {
-            $this->parsedFile->expectedPatternFile !== "" || $this->parsedFile->expectedPattern !== "" => OutputMatcherMode::Special,
+            $this->parsedFile->expectedPatternFile !== "" || $this->parsedFile->expectedPattern !== "" => OutputMatcherMode::Substitution,
             $this->parsedFile->expectedRegexFile !== "" || $this->parsedFile->expectedRegex !== "" => OutputMatcherMode::Regex,
             default => OutputMatcherMode::Literal,
         };

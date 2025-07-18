@@ -7,5 +7,5 @@ enum OutputMatcherMode
 {
     case Literal;
     case Regex;
-    case Special;
+    case Substitution;
 }

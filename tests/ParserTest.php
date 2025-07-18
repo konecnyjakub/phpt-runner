@@ -639,6 +639,68 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_substitutions.phpt");
+        $this->assertSame("Test substitutions", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo \"+123 abc test\"; ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("%i%w%s test", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_substitutions_external.phpt");
+        $this->assertSame("Test substitutions external", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo \"11f test ext\"; ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_output_substitution.txt", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);
@@ -652,6 +714,6 @@ final class ParserTest extends TestCase
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
         $this->assertThrowsException(function () use ($parser, $filename) {
             $parser->parse($filename);
-        }, RequiredSectionMissingException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL is required, none found in file $filename");
+        }, RequiredSectionMissingException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL, EXPECTF, EXPECTF_EXTERNAL is required, none found in file $filename");
     }
 }

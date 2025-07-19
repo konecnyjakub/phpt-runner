@@ -16,7 +16,7 @@ final class ParserTest extends TestCase
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt");
         $this->assertSame("Skipped test", $result->testName);
         $this->assertSame("", $result->testDescription);
-        $this->assertSame("<?php echo \"skip\"; ?>", $result->skipCode);
+        $this->assertSame("<?php echo \"Skipped\"; ?>", $result->skipCode);
         $this->assertSame([], $result->conflictingKeys);
         $this->assertTrue($result->captureStdin);
         $this->assertTrue($result->captureStdout);

@@ -1,7 +1,7 @@
 --TEST--
-Skipped test
+Test skip xfail
 --SKIPIF--
-<?php echo "Skipped"; ?>
+<?php echo "xfail"; ?>
 --FILE--
 <?php echo "one"; ?>
 --EXPECT--

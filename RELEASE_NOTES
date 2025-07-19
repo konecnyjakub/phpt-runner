@@ -2,4 +2,6 @@ A new version of PHPT runner is out. It changes parsing of sections TEST, ARGS a
 
 Sections GET, COOKIE and PHPDBG are parsed now. Sections EXPECTREGEX, EXPECTREGEX_EXTERNAL, CAPTURE_STDIO, EXPECTF and EXPECTF_EXTERNAL are now used in PhptRunner.
 
+Tests are now marked as flaky/supposed to fail if SKIPIF section has output starting with "flaky" or "xfail" respectively.
+
 For complete list of changes since previous version, see CHANGELOG.md.

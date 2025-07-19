@@ -19,7 +19,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("Skipped test", $result->testName);
         $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("skip", $result->output);
+        $this->assertSame("Skipped", $result->output);
         $this->assertSame("", $result->expectedOutput);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test.phpt";
@@ -213,5 +213,23 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("11f test ext", $result->output);
         $this->assertSame("%x%sext", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_skip_xfail.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test skip xfail", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Passed, $result->outcome);
+        $this->assertSame("one", $result->output);
+        $this->assertSame("two", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_skip_flaky.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test skip flaky", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertNotSame(Outcome::Skipped, $result->outcome);
+        //$this->assertSame("1", $result->output);
+        $this->assertSame("1", $result->expectedOutput);
     }
 }

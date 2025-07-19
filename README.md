@@ -26,6 +26,7 @@ These sections work exactly as described in the documentation. If you notice any
 
 * --TEST--
 * --DESCRIPTION--
+* --SKIPIF--
 * --STDIN--
 * --INI--
 * --ARGS--
@@ -46,7 +47,6 @@ These sections work exactly as described in the documentation. If you notice any
 
 These sections are used by PhptRunner but there are some differences from behavior described in the documentation. We want to eventually eliminate the differences.
 
-* --SKIPIF-- (only output starting with "skip" does anything)
 * --CAPTURE_STDIO-- (only space is supported as separator)
 * --EXTENSIONS-- (we do not try to load those extensions, we just skip the test if any of those extensions is not loaded)
 * --GET-- (it forces the use of the cgi binary but is not passed to it)

@@ -15,13 +15,6 @@ final readonly class PhptRunner
             return "This test requires the cgi binary.";
         }
 
-        if ($parsedFile->skipCode !== "") {
-            $skipResult = $this->phpRunner->runCode($parsedFile->skipCode);
-            if (str_starts_with($skipResult, "skip")) {
-                return $skipResult;
-            }
-        }
-
         foreach ($parsedFile->requiredExtensions as $extension) {
             if (!$this->phpRunner->isExtensionLoaded($extension)) {
                 return "This test requires PHP extension $extension.";
@@ -31,11 +24,26 @@ final readonly class PhptRunner
         return null;
     }
 
+    private function getSkipResult(ParsedFile $parsedFile): ?string
+    {
+        if ($parsedFile->skipCode === "") {
+            return null;
+        }
+        return $this->phpRunner->runCode($parsedFile->skipCode);
+    }
+
     public function runFile(string $fileName): FileResultSet
     {
         $parsedFile = $this->parser->parse($fileName);
 
         $skipText = $this->checkPrerequisites($parsedFile);
+        $skipResult = null;
+        if ($skipText === null) {
+            $skipResult = $this->getSkipResult($parsedFile);
+            if (is_string($skipResult) && str_starts_with(strtolower($skipResult), "skip")) {
+                $skipText = $skipResult;
+            }
+        }
         if (is_string($skipText)) {
             return new FileResultSet(
                 $fileName,
@@ -45,6 +53,15 @@ final readonly class PhptRunner
                 $skipText,
                 ""
             );
+        }
+
+        if (is_string($skipResult)) {
+            if (str_starts_with(strtolower($skipResult), "xfail")) {
+                $parsedFile->supposedToFail = true;
+            }
+            if (str_starts_with(strtolower($skipResult), "flaky")) {
+                $parsedFile->flaky = true;
+            }
         }
 
         $success = true;

@@ -241,9 +241,8 @@ final readonly class Parser
     private function transformCaptureStreamsToArray(string $value): array
     {
         $values = [];
-        $streams = explode(" ", $value);
-        foreach ($streams as $stream) {
-            if (in_array($stream, self::STREAMS, true)) {
+        foreach (self::STREAMS as $stream) {
+            if (stripos($value, $stream) !== false) {
                 $values[] = $stream;
             }
         }

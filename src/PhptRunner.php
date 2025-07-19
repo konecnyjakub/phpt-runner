@@ -74,6 +74,7 @@ final readonly class PhptRunner
                 $parsedFile->arguments,
                 $parsedFile->input,
                 dirname($fileName),
+                $parsedFile->captureStdin,
                 $parsedFile->captureStdout,
                 $parsedFile->captureStderr
             );

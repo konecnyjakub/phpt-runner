@@ -35,6 +35,7 @@ final readonly class PhpRunner
         string $arguments = "",
         string $input = "",
         ?string $workingDirectory = null,
+        bool $captureStdin = true,
         bool $captureStdout = true,
         bool $captureStderr = true
     ): string {
@@ -55,6 +56,9 @@ final readonly class PhpRunner
             1 => ["pipe", "w"],
             2 => ["redirect", 1],
         ];
+        if (!$captureStdin) {
+            $pipesSpec[0] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+        }
         if (!$captureStderr) {
             $pipesSpec[2] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
         }
@@ -69,10 +73,12 @@ final readonly class PhpRunner
             return "";
         }
         /** @var resource[] $pipes */
-        if ($input !== "") {
-            fwrite($pipes[0], $input);
+        if ($captureStdin) {
+            if ($input !== "") {
+                fwrite($pipes[0], $input);
+            }
+            fclose($pipes[0]);
         }
-        fclose($pipes[0]);
 
         $output = match (true) {
             $captureStdout => (string) stream_get_contents($pipes[1]),

@@ -51,6 +51,13 @@ final class PhpRunnerTest extends TestCase
         $result = $runner->runCode($code, captureStdout: false, captureStderr: false);
         $this->assertSame("", $result);
 
+        $code = "<?php echo stream_get_contents(STDIN); ?>";
+        $result = $runner->runCode($code, input: "abc", captureStdin: false);
+        $this->assertMatchesRegExp(
+            "/^PHP Notice:  stream_get_contents\(\): Read of [0-9]+ bytes failed with errno=9 Bad file descriptor/",
+            $result
+        );
+
         $parser = new Parser();
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
         $result = $runner->runCode(

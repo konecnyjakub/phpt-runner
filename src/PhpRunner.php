@@ -26,6 +26,47 @@ final readonly class PhpRunner
 
     /**
      * @param array<string, string|int|float> $iniSettings
+     */
+    private function createCommandLine(string $filename, array $iniSettings = [], string $arguments = ""): string
+    {
+        $commandLine = $this->phpBinary;
+        foreach ($iniSettings as $key => $value) {
+            $commandLine .= " -d $key=$value";
+        }
+        $commandLine .= " " . $filename;
+        if ($arguments !== "") {
+            $commandLine .= " " . $arguments;
+        }
+        return $commandLine;
+    }
+
+    /**
+     * @return array<int, string[]|int[]|resource|false>
+     */
+    private function createPipesSpec(bool $stdin, bool $stdout, bool $stderr): array
+    {
+        $pipesSpec = [
+            0 => ["pipe", "r"],
+            1 => ["pipe", "w"],
+            2 => ["redirect", 1],
+        ];
+        if (!$stdin) {
+            $pipesSpec[0] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+        }
+        if (!$stderr) {
+            $pipesSpec[2] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+        }
+        if (!$stdout) {
+            $pipesSpec[1] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
+            if ($stderr) {
+                $pipesSpec[2] = ["pipe", "w"];
+            }
+        }
+        return $pipesSpec;
+    }
+
+    /**
+     * @param array<string, string|int|float> $iniSettings
      * @param array<string, string|int|float> $env
      */
     public function runCode(
@@ -43,32 +84,13 @@ final readonly class PhpRunner
         $filename = stream_get_meta_data($file)['uri'];
         fwrite($file, $code);
 
-        $commandLine = $this->phpBinary;
-        foreach ($iniSettings as $key => $value) {
-            $commandLine .= " -d $key=$value";
-        }
-        $commandLine .= " " . $filename;
-        if ($arguments !== "") {
-            $commandLine .= " " . $arguments;
-        }
-        $pipesSpec = [
-            0 => ["pipe", "r"],
-            1 => ["pipe", "w"],
-            2 => ["redirect", 1],
-        ];
-        if (!$captureStdin) {
-            $pipesSpec[0] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
-        }
-        if (!$captureStderr) {
-            $pipesSpec[2] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
-        }
-        if (!$captureStdout) {
-            $pipesSpec[1] = fopen(PHP_OS_FAMILY === "Windows" ? "NUL" : "/dev/null", "c");
-            if ($captureStderr) {
-                $pipesSpec[2] = ["pipe", "w"];
-            }
-        }
-        $process = proc_open($commandLine, $pipesSpec, $pipes, $workingDirectory, $env);
+        $process = proc_open(
+            $this->createCommandLine($filename, $iniSettings, $arguments),
+            $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr),
+            $pipes,
+            $workingDirectory,
+            $env
+        );
         if ($process === false) {
             return "";
         }

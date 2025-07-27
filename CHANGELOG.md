@@ -1,4 +1,4 @@
-Version 0.3.0-dev
+Version 0.3.0
 - added events to PhptRunner
 - section EXPECTHEADERS now forces the use of the cgi binary
 

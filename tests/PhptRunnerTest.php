@@ -3,8 +3,16 @@ declare(strict_types=1);
 
 namespace Konecnyjakub\PHPTRunner;
 
+use Konecnyjakub\EventDispatcher\DebugEventDispatcher;
+use Konecnyjakub\EventDispatcher\DummyEventDispatcher;
+use Konecnyjakub\PHPTRunner\Events\TestFailed;
+use Konecnyjakub\PHPTRunner\Events\TestFinished;
+use Konecnyjakub\PHPTRunner\Events\TestPassed;
+use Konecnyjakub\PHPTRunner\Events\TestSkipped;
+use Konecnyjakub\PHPTRunner\Events\TestStarted;
 use MyTester\Attributes\TestSuite;
 use MyTester\TestCase;
+use Psr\Log\NullLogger;
 
 #[TestSuite("PHPT file runner")]
 final class PhptRunnerTest extends TestCase
@@ -231,5 +239,54 @@ final class PhptRunnerTest extends TestCase
         $this->assertNotSame(Outcome::Skipped, $result->outcome);
         //$this->assertSame("1", $result->output);
         $this->assertSame("1", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing_test.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Failing test", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Failed, $result->outcome);
+        $this->assertSame("test123", $result->output);
+        $this->assertSame("test1234", $result->expectedOutput);
+    }
+
+    public function testEvents(): void
+    {
+        $eventDispatcher = new DebugEventDispatcher(new DummyEventDispatcher(), new NullLogger());
+        $runner = new PhptRunner(new Parser(), new PhpRunner(), $eventDispatcher);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt";
+        $runner->runFile($filename);
+        $this->assertTrue($eventDispatcher->dispatched(TestSkipped::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestSkipped::class, 2));
+        $this->assertFalse($eventDispatcher->dispatched(TestStarted::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestFinished::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestPassed::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestFailed::class));
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test.phpt";
+        $runner->runFile($filename);
+        $this->assertTrue($eventDispatcher->dispatched(TestSkipped::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestSkipped::class, 2));
+        $this->assertTrue($eventDispatcher->dispatched(TestStarted::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestStarted::class, 2));
+        $this->assertTrue($eventDispatcher->dispatched(TestFinished::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestFinished::class, 2));
+        $this->assertTrue($eventDispatcher->dispatched(TestPassed::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestPassed::class, 2));
+        $this->assertFalse($eventDispatcher->dispatched(TestFailed::class));
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing_test.phpt";
+        $runner->runFile($filename);
+        $this->assertTrue($eventDispatcher->dispatched(TestSkipped::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestSkipped::class, 2));
+        $this->assertTrue($eventDispatcher->dispatched(TestStarted::class, 2));
+        $this->assertFalse($eventDispatcher->dispatched(TestStarted::class, 3));
+        $this->assertTrue($eventDispatcher->dispatched(TestFinished::class, 2));
+        $this->assertFalse($eventDispatcher->dispatched(TestFinished::class, 3));
+        $this->assertTrue($eventDispatcher->dispatched(TestPassed::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestPassed::class, 2));
+        $this->assertTrue($eventDispatcher->dispatched(TestFailed::class));
+        $this->assertFalse($eventDispatcher->dispatched(TestFailed::class, 2));
     }
 }

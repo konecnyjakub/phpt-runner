@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace Konecnyjakub\PHPTRunner;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
+
 final readonly class PhptRunner
 {
-    public function __construct(private Parser $parser, private PhpRunner $phpRunner)
-    {
+    public function __construct(
+        private Parser $parser,
+        private PhpRunner $phpRunner,
+        private ?EventDispatcherInterface $eventDispatcher = null
+    ) {
     }
 
     private function checkPrerequisites(ParsedFile $parsedFile): ?string
@@ -45,7 +50,7 @@ final readonly class PhptRunner
             }
         }
         if (is_string($skipText)) {
-            return new FileResultSet(
+            $fileResultSet = new FileResultSet(
                 $fileName,
                 $parsedFile->testName,
                 $parsedFile->testDescription,
@@ -53,6 +58,8 @@ final readonly class PhptRunner
                 $skipText,
                 ""
             );
+            $this->eventDispatcher?->dispatch(new Events\TestSkipped($fileResultSet));
+            return $fileResultSet;
         }
 
         if (is_string($skipResult)) {
@@ -64,6 +71,7 @@ final readonly class PhptRunner
             }
         }
 
+        $this->eventDispatcher?->dispatch(new Events\TestStarted($parsedFile));
         $success = true;
         $outputMatcher = new OutputMatcher($parsedFile);
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
@@ -93,7 +101,7 @@ final readonly class PhptRunner
             $this->phpRunner->runCode($parsedFile->cleanCode, workingDirectory: dirname($fileName));
         }
 
-        return new FileResultSet(
+        $fileResultSet = new FileResultSet(
             $fileName,
             $parsedFile->testName,
             $parsedFile->testDescription,
@@ -101,5 +109,10 @@ final readonly class PhptRunner
             $output, // @phpstan-ignore variable.undefined
             $outputMatcher->getExpectedOutput()
         );
+        $this->eventDispatcher?->dispatch(new Events\TestFinished($fileResultSet));
+        $this->eventDispatcher?->dispatch(
+            $success ? new Events\TestPassed($fileResultSet) : new Events\TestFailed($fileResultSet)
+        );
+        return $fileResultSet;
     }
 }

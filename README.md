@@ -51,6 +51,7 @@ These sections are used by PhptRunner but there are some differences from behavi
 * --EXTENSIONS-- (we do not try to load those extensions, we just skip the test if any of those extensions is not loaded)
 * --GET-- (it forces the use of the cgi binary but is not passed to it)
 * --COOKIE-- (it forces the use of the cgi binary but is not passed to it)
+* --EXPECTHEADERS-- (it forces the use of the cgi binary but is not passed to it)
 * --EXPECTF-- (regular expressions %r...%r are not supported)
 * --EXPECTF_EXTERNAL-- (regular expressions %r...%r are not supported)
 
@@ -61,7 +62,6 @@ These sections are parsed by Parser and returned in ParsedFile but PhptRunner do
 * --CONFLICTS--
 * --PHPDBG--
 * --REDIRECTTEST--
-* --EXPECTHEADERS--
 
 ### Ignored sections
 

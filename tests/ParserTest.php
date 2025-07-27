@@ -313,7 +313,7 @@ final class ParserTest extends TestCase
         );
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
-        $this->assertFalse($result->requiresCgiBinary);
+        $this->assertTrue($result->requiresCgiBinary);
         $this->assertSame([], $result->phpdbgCommands);
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);

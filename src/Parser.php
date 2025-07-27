@@ -62,6 +62,7 @@ final readonly class Parser
         self::SECTION_GET,
         self::SECTION_COOKIE,
         self::SECTION_PHPDBG,
+        self::SECTION_EXPECTHEADERS,
     ];
     private const array OPTIONAL_SECTIONS_STRING = [
         self::SECTION_DESCRIPTION,
@@ -96,6 +97,7 @@ final readonly class Parser
     private const array IMPLIED_CGI_SECTIONS = [
         self::SECTION_GET,
         self::SECTION_COOKIE,
+        self::SECTION_EXPECTHEADERS,
     ];
 
     public function parse(string $filename, bool $checkRequiredSections = true): ParsedFile
@@ -143,7 +145,7 @@ final readonly class Parser
         $result->phpdbgCommands = $sections[self::SECTION_PHPDBG]; // @phpstan-ignore assign.propertyType
         $result->supposedToFail = $sections[self::SECTION_XFAIL]; // @phpstan-ignore assign.propertyType
         $result->flaky = $sections[self::SECTION_FLAKY]; // @phpstan-ignore assign.propertyType
-        $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS] ?? []; // @phpstan-ignore assign.propertyType
+        $result->expectedHeaders = $sections[self::SECTION_EXPECTHEADERS]; // @phpstan-ignore assign.propertyType
         $result->expectedText = $sections[self::SECTION_EXPECT] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedTextFile = $sections[self::SECTION_EXPECT_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedPattern = $sections[self::SECTION_EXPECTF] ?? ""; // @phpstan-ignore assign.propertyType
@@ -164,7 +166,11 @@ final readonly class Parser
             return true;
         }
         foreach (self::IMPLIED_CGI_SECTIONS as $sectionName) {
-            if (is_array($sections[$sectionName]) && count($sections[$sectionName]) > 0) {
+            if (
+                isset($sections[$sectionName]) &&
+                is_array($sections[$sectionName]) &&
+                count($sections[$sectionName]) > 0
+            ) {
                 return true;
             }
         }

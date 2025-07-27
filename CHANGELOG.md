@@ -1,5 +1,6 @@
 Version 0.3.0-dev
 - added events to PhptRunner
+- section EXPECTHEADERS now forces the use of the cgi binary
 
 Version 0.2.0
 - only first line of sections TEST, ARGS and FILE_EXTERNAL is now parsed

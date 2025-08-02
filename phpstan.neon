@@ -9,4 +9,6 @@ parameters:
     excludePaths:
         - %rootDir%/../../../tests/temp/*
     treatPhpDocTypesAsCertain: false
+    strictRules:
+        disallowedShortTernary: false
     ignoreErrors:

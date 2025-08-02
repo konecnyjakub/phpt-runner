@@ -13,7 +13,20 @@ The best way to install PHPT Runner is via Composer. Just add konecnyjakub/phpt-
 Quick start
 -----------
 
-To be added
+```php
+<?php
+declare(strict_types=1);
+
+use Konecnyjakub\PHPTRunner\Parser;
+use Konecnyjakub\PHPTRunner\PhpRunner;
+use Konecnyjakub\PHPTRunner\PhptRunner;
+use Konecnyjakub\PHPTRunner\TestsRunner;
+
+$testsRunner = new TestsRunner(new PhptRunner(new Parser(), new PhpRunner()));
+$results = $testsRunner->run(__DIR__ . "/tests");
+```
+
+TestsRunner walks through all .phpt files in the given directory (but not subdirectories at the moment), runs them and returns an array of objects of type Konecnyjakub\PHPTRunner\FileResultSet representing results for each .phpt file.
 
 Advanced usage
 --------------

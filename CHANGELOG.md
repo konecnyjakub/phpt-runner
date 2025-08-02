@@ -1,5 +1,6 @@
 Version 0.4.0-dev
 - PhptRunner now reports parse error as a failure
+- added TestsRunner
 
 Version 0.3.0
 - added events to PhptRunner

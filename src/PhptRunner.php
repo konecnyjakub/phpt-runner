@@ -39,7 +39,18 @@ final readonly class PhptRunner
 
     public function runFile(string $fileName): FileResultSet
     {
-        $parsedFile = $this->parser->parse($fileName);
+        try {
+            $parsedFile = $this->parser->parse($fileName);
+        } catch (ParseErrorException $e) {
+            return new FileResultSet(
+                $fileName,
+                "",
+                "",
+                Outcome::Failed,
+                "Invalid file: " . $e->getMessage(),
+                ""
+            );
+        }
 
         $skipText = $this->checkPrerequisites($parsedFile);
         $skipResult = null;

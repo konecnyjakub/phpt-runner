@@ -248,6 +248,24 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Failed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test1234", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Failed, $result->outcome);
+        $this->assertSame("Invalid file: Required section TEST not found in file $filename", $result->output);
+        $this->assertSame("", $result->expectedOutput);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Failed, $result->outcome);
+        $this->assertSame("Invalid file: At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL, EXPECTF, EXPECTF_EXTERNAL is required, none found in file $filename", $result->output);
+        $this->assertSame("", $result->expectedOutput);
     }
 
     public function testEvents(): void

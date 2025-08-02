@@ -1,3 +1,6 @@
+Version 0.4.0-dev
+- PhptRunner now reports parse error as a failure
+
 Version 0.3.0
 - added events to PhptRunner
 - section EXPECTHEADERS now forces the use of the cgi binary

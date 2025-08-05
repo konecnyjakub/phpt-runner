@@ -15,8 +15,10 @@ final class PhpRunnerTest extends TestCase
         $runner = new PhpRunner();
         $this->assertFalse($runner->isCgiBinary());
 
-        $runner = new PhpRunner("php-cgi");
-        $this->assertTrue($runner->isCgiBinary());
+        if (PHP_OS_FAMILY !== "Windows") {
+            $runner = new PhpRunner("php-cgi");
+            $this->assertTrue($runner->isCgiBinary());
+        }
     }
 
     public function testIsExtensionLoaded(): void
@@ -30,6 +32,10 @@ final class PhpRunnerTest extends TestCase
     #[Data(["php-cgi",])]
     public function testRunCode(string $phpBinary): void
     {
+        if ($phpBinary === "php-cgi" && PHP_OS_FAMILY === "Windows") {
+            $this->markTestSkipped("php-cgi binary is not present on Windows");
+        }
+
         $runner = new PhpRunner($phpBinary);
         $parser = new Parser();
         $defaultIniSettings = $phpBinary === "php-cgi" ? ["opcache.enable" => 0,] : [];

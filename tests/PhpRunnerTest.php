@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Konecnyjakub\PHPTRunner;
 
+use MyTester\Attributes\Data;
 use MyTester\Attributes\TestSuite;
 use MyTester\TestCase;
 
@@ -13,6 +14,9 @@ final class PhpRunnerTest extends TestCase
     {
         $runner = new PhpRunner();
         $this->assertFalse($runner->isCgiBinary());
+
+        $runner = new PhpRunner("php-cgi");
+        $this->assertTrue($runner->isCgiBinary());
     }
 
     public function testIsExtensionLoaded(): void
@@ -22,69 +26,80 @@ final class PhpRunnerTest extends TestCase
         $this->assertFalse($runner->isExtensionLoaded("abc"));
     }
 
-    public function testRunCode(): void
+    #[Data([PHP_BINARY,])]
+    #[Data(["php-cgi",])]
+    public function testRunCode(string $phpBinary): void
     {
-        $runner = new PhpRunner();
+        $runner = new PhpRunner($phpBinary);
+        $parser = new Parser();
+        $defaultIniSettings = $phpBinary === "php-cgi" ? ["opcache.enable" => 0,] : [];
+        $defaultOutputHeaders = $phpBinary === "php-cgi" ? "Content-type: text/html; charset=UTF-8\r\n\r\n" : "";
         $code = "<?php echo 'abc'; ?>";
-        $this->assertSame("abc", $runner->runCode($code));
+        $this->assertSame($defaultOutputHeaders . "abc", $runner->runCode($code, $defaultIniSettings));
 
         $code = "<?php die('skip'); ?>";
-        $this->assertSame("skip", $runner->runCode($code));
+        $this->assertSame($defaultOutputHeaders . "skip", $runner->runCode($code, $defaultIniSettings));
 
         $code = "<?php fclose(\$abc); ?>";
-        $result = $runner->runCode($code);
+        $result = $runner->runCode($code, $defaultIniSettings);
         $this->assertContains(
             'PHP Fatal error:  Uncaught TypeError: fclose(): Argument #1 ($stream) must be of type resource, null given',
             $result
         );
 
-        $code = "<?php echo \"test123\"; fwrite(STDERR, \"test error\"); ?>";
-        $result = $runner->runCode($code);
-        $this->assertSame("test123test error", $result);
+        if ($phpBinary !== "php-cgi") {
+            $code = "<?php echo \"test123\"; fwrite(STDERR, \"test error\"); ?>";
+            $result = $runner->runCode($code, $defaultIniSettings);
+            $this->assertSame("test123test error", $result);
 
-        $result = $runner->runCode($code, captureStdout: false);
-        $this->assertSame("test error", $result);
+            $result = $runner->runCode($code, $defaultIniSettings, captureStdout: false);
+            $this->assertSame("test error", $result);
 
-        $result = $runner->runCode($code, captureStderr: false);
-        $this->assertSame("test123", $result);
+            $result = $runner->runCode($code, $defaultIniSettings, captureStderr: false);
+            $this->assertSame("test123", $result);
 
-        $result = $runner->runCode($code, captureStdout: false, captureStderr: false);
-        $this->assertSame("", $result);
+            $result = $runner->runCode($code, $defaultIniSettings, captureStdout: false, captureStderr: false);
+            $this->assertSame("", $result);
 
-        $code = "<?php echo stream_get_contents(STDIN); ?>";
-        $result = $runner->runCode($code, input: "abc", captureStdin: false);
-        $this->assertMatchesRegExp(
-            "/^PHP Notice:  stream_get_contents\(\): Read of [0-9]+ bytes failed with errno=9 Bad file descriptor/",
-            $result
-        );
+            $code = "<?php echo stream_get_contents(STDIN); ?>";
+            $result = $runner->runCode($code, $defaultIniSettings, input: "abc", captureStdin: false);
+            $this->assertMatchesRegExp(
+                "/^PHP Notice:  stream_get_contents\(\): Read of [0-9]+ bytes failed with errno=9 Bad file descriptor/",
+                $result
+            );
 
-        $parser = new Parser();
-        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
-        $result = $runner->runCode(
-            $parsedFile->testCode,
-            arguments: $parsedFile->arguments
-        );
-        $this->assertSame("bool(true)", $result);
+            $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
+            $result = $runner->runCode(
+                $parsedFile->testCode,
+                $defaultIniSettings,
+                arguments: $parsedFile->arguments
+            );
+            $this->assertSame("bool(true)", $result);
+        }
 
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
         $result = $runner->runCode(
             $parsedFile->testCode,
+            $defaultIniSettings,
             env: $parsedFile->envVariables
         );
-        $this->assertSame("abc", $result);
+        $this->assertSame($defaultOutputHeaders . "abc", $result);
 
-        $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
-        $result = $runner->runCode(
-            $parsedFile->testCode,
-            input: $parsedFile->input
-        );
-        $this->assertSame("first line" . PHP_EOL . "second line", $result);
+        if ($phpBinary !== "php-cgi") {
+            $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
+            $result = $runner->runCode(
+                $parsedFile->testCode,
+                $defaultIniSettings,
+                input: $parsedFile->input
+            );
+            $this->assertSame($defaultOutputHeaders . "first line" . PHP_EOL . "second line", $result);
+        }
 
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
         $result = $runner->runCode(
             $parsedFile->testCode,
-            iniSettings: $parsedFile->iniSettings
+            iniSettings: $defaultIniSettings + $parsedFile->iniSettings
         );
-        $this->assertSame("0", $result);
+        $this->assertSame($defaultOutputHeaders . "0", $result);
     }
 }

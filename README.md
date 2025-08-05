@@ -26,7 +26,7 @@ $testsRunner = new TestsRunner(new PhptRunner(new Parser(), new PhpRunner()));
 $results = $testsRunner->run(__DIR__ . "/tests");
 ```
 
-TestsRunner walks through all .phpt files in the given directory (but not subdirectories at the moment), runs them and returns an array of objects of type Konecnyjakub\PHPTRunner\FileResultSet representing results for each .phpt file.
+TestsRunner walks through all .phpt files in the given directory (but not subdirectories at the moment), runs them and returns an instance of Konecnyjakub\PHPTRunner\TestsResultSet.
 
 Advanced usage
 --------------

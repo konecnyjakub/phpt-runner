@@ -9,16 +9,13 @@ final readonly class TestsRunner
     {
     }
 
-    /**
-     * @return FileResultSet[]
-     */
-    public function run(string $directory): array
+    public function run(string $directory): TestsResultSet
     {
         $results = [];
         $files = glob(realpath($directory) . DIRECTORY_SEPARATOR . "*.phpt") ?: [];
         foreach ($files as $file) {
             $results[] = $this->runner->runFile($file);
         }
-        return $results;
+        return new TestsResultSet($results);
     }
 }

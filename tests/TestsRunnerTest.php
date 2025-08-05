@@ -13,10 +13,12 @@ final class TestsRunnerTest extends TestCase
     {
         $testsRunner = new TestsRunner(new PhptRunner(new Parser(), new PhpRunner()));
 
-        $this->assertSame([], $testsRunner->run("/non-existing"));
+        $result = $testsRunner->run("/non-existing");
+        $this->assertSame([], $result->results);
+        $this->assertSame(0, $result->testsTotal);
 
         $result = $testsRunner->run(__DIR__);
-        $this->assertArrayOfType(FileResultSet::class, $result);
-        $this->assertCount(27, $result);
+        $this->assertCount(27, $result->results);
+        $this->assertSame(27, $result->testsTotal);
     }
 }

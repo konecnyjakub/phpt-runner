@@ -38,7 +38,7 @@ final class PhpRunnerTest extends TestCase
 
         $runner = new PhpRunner($phpBinary);
         $parser = new Parser();
-        $defaultIniSettings = $isCgi ? ["opcache.enable" => 0,] : [];
+        $defaultIniSettings = $isCgi ? ["opcache.enable" => 0, "expose_php" => 0,] : [];
         $defaultOutputHeaders = $isCgi ? "Content-type: text/html; charset=UTF-8\r\n\r\n" : "";
         $code = "<?php echo 'abc'; ?>";
         $this->assertSame($defaultOutputHeaders . "abc", $runner->runCode($code, $defaultIniSettings));

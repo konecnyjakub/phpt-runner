@@ -15,10 +15,9 @@ final class PhpRunnerTest extends TestCase
         $runner = new PhpRunner();
         $this->assertFalse($runner->isCgiBinary());
 
-        if (PHP_OS_FAMILY !== "Windows") {
-            $runner = new PhpRunner("php-cgi");
-            $this->assertTrue($runner->isCgiBinary());
-        }
+        $cgiBinary = PHP_OS_FAMILY !== "Windows" ? "php-cgi" : "C:\\tools\\php\\php-cgi.exe";
+        $runner = new PhpRunner($cgiBinary);
+        $this->assertTrue($runner->isCgiBinary());
     }
 
     public function testIsExtensionLoaded(): void
@@ -32,14 +31,15 @@ final class PhpRunnerTest extends TestCase
     #[Data(["php-cgi",])]
     public function testRunCode(string $phpBinary): void
     {
-        if ($phpBinary === "php-cgi" && PHP_OS_FAMILY === "Windows") {
-            $this->markTestSkipped("php-cgi binary is not present on Windows");
+        $isCgi = $phpBinary === "php-cgi";
+        if ($isCgi && PHP_OS_FAMILY === "Windows") {
+            $phpBinary = "C:\\tools\\php\\php-cgi.exe";
         }
 
         $runner = new PhpRunner($phpBinary);
         $parser = new Parser();
-        $defaultIniSettings = $phpBinary === "php-cgi" ? ["opcache.enable" => 0,] : [];
-        $defaultOutputHeaders = $phpBinary === "php-cgi" ? "Content-type: text/html; charset=UTF-8\r\n\r\n" : "";
+        $defaultIniSettings = $isCgi ? ["opcache.enable" => 0,] : [];
+        $defaultOutputHeaders = $isCgi ? "Content-type: text/html; charset=UTF-8\r\n\r\n" : "";
         $code = "<?php echo 'abc'; ?>";
         $this->assertSame($defaultOutputHeaders . "abc", $runner->runCode($code, $defaultIniSettings));
 
@@ -53,7 +53,7 @@ final class PhpRunnerTest extends TestCase
             $result
         );
 
-        if ($phpBinary !== "php-cgi") {
+        if (!$isCgi) {
             $code = "<?php echo \"test123\"; fwrite(STDERR, \"test error\"); ?>";
             $result = $runner->runCode($code, $defaultIniSettings);
             $this->assertSame("test123test error", $result);
@@ -91,7 +91,7 @@ final class PhpRunnerTest extends TestCase
         );
         $this->assertSame($defaultOutputHeaders . "abc", $result);
 
-        if ($phpBinary !== "php-cgi") {
+        if (!$isCgi) {
             $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
             $result = $runner->runCode(
                 $parsedFile->testCode,

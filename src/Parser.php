@@ -102,20 +102,7 @@ final readonly class Parser
 
     public function parse(string $filename, bool $checkRequiredSections = true): ParsedFile
     {
-        $lines = @file($filename);
-        if ($lines === false) {
-            throw new FileNotFoundException("File $filename does not exist or cannot be read");
-        }
-
-        $sections = [];
-        foreach ($lines as $line) {
-            if (preg_match("/^--([A-Z_]+)--/", $line, $matches) === 1) {
-                $section = $matches[1];
-                $sections[$section] = "";
-            } elseif (isset($section)) {
-                $sections[$section] .= $line;
-            }
-        }
+        $sections = $this->getSections($filename);
 
         $this->transformSections($sections, $filename);
         $this->addOptionalSections($sections);
@@ -155,6 +142,29 @@ final readonly class Parser
         $result->cleanCode = $sections[self::SECTION_CLEAN]; // @phpstan-ignore assign.propertyType
 
         return $result;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getSections(string $filename): array
+    {
+        $lines = @file($filename);
+        if ($lines === false) {
+            throw new FileNotFoundException("File $filename does not exist or cannot be read");
+        }
+
+        $sections = [];
+        foreach ($lines as $line) {
+            if (preg_match("/^--([A-Z_]+)--/", $line, $matches) === 1) {
+                $section = $matches[1];
+                $sections[$section] = "";
+            } elseif (isset($section)) {
+                $sections[$section] .= $line;
+            }
+        }
+
+        return $sections;
     }
 
     /**

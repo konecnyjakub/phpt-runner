@@ -12,12 +12,12 @@ final class TestsResultSetTest extends TestCase
     public function testConstructor(): void
     {
         $results = [
-            new FileResultSet("", "", "", Outcome::Passed, "", ""),
-            new FileResultSet("", "", "", Outcome::Skipped, "", ""),
-            new FileResultSet("", "", "", Outcome::Failed, "", ""),
-            new FileResultSet("", "", "", Outcome::Passed, "", ""),
-            new FileResultSet("", "", "", Outcome::Failed, "", ""),
-            new FileResultSet("", "", "", Outcome::Passed, "", ""),
+            new FileResultSet("", "", "", Outcome::Passed),
+            new FileResultSet("", "", "", Outcome::Skipped),
+            new FileResultSet("", "", "", Outcome::Failed),
+            new FileResultSet("", "", "", Outcome::Passed),
+            new FileResultSet("", "", "", Outcome::Failed,),
+            new FileResultSet("", "", "", Outcome::Passed),
         ];
         $testsResultSet = new TestsResultSet($results);
 

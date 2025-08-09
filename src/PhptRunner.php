@@ -47,8 +47,7 @@ final readonly class PhptRunner
                 "",
                 "",
                 Outcome::Failed,
-                "Invalid file: " . $e->getMessage(),
-                ""
+                "Invalid file: " . $e->getMessage()
             );
         }
 
@@ -66,8 +65,7 @@ final readonly class PhptRunner
                 $parsedFile->testName,
                 $parsedFile->testDescription,
                 Outcome::Skipped,
-                $skipText,
-                ""
+                $skipText
             );
             $this->eventDispatcher?->dispatch(new Events\TestSkipped($fileResultSet));
             return $fileResultSet;

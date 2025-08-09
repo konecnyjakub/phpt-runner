@@ -26,8 +26,11 @@ final class HeadersMatcherTest extends TestCase
         );
 
         $parsedFile = (new Parser())->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_expected_headers.phpt");
-        $phpRunner = new PhpRunner(PHP_OS_FAMILY !== "Windows" ? "php-cgi" : "C:\\tools\\php\\php-cgi.exe");
-        $output = $phpRunner->runCode($parsedFile->testCode, iniSettings: ["opcache.enable" => 0, "expose_php" => 0,]);
+        $phpRunner = new PhpRunner(
+            PHP_OS_FAMILY !== "Windows" ? "php-cgi" : "C:\\tools\\php\\php-cgi.exe",
+            ["opcache.enable" => 0, "expose_php" => 0,]
+        );
+        $output = $phpRunner->runCode($parsedFile->testCode);
         $this->assertSame(
             ["content-type" => "text/plain; charset=UTF-8", "pragma" => "no-cache",],
             $headersMatcher->getOutputHeaders($output)

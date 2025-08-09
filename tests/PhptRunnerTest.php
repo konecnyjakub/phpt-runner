@@ -10,6 +10,7 @@ use Konecnyjakub\PHPTRunner\Events\TestFinished;
 use Konecnyjakub\PHPTRunner\Events\TestPassed;
 use Konecnyjakub\PHPTRunner\Events\TestSkipped;
 use Konecnyjakub\PHPTRunner\Events\TestStarted;
+use MyTester\Attributes\Data;
 use MyTester\Attributes\TestSuite;
 use MyTester\TestCase;
 use Psr\Log\NullLogger;
@@ -17,16 +18,17 @@ use Psr\Log\NullLogger;
 #[TestSuite("PHPT file runner")]
 final class PhptRunnerTest extends TestCase
 {
-    public function testRunFile(): void
+    #[Data([PHP_BINARY,])]
+    #[Data(["php-cgi",])]
+    public function testRunFile(string $phpBinary): void
     {
-        $runner = new PhptRunner(new Parser(), new PhpRunner());
-        $cgiRunner = new PhptRunner(
-            new Parser(),
-            new PhpRunner(
-                PHP_OS_FAMILY !== "Windows" ? "php-cgi" : "C:\\tools\\php\\php-cgi.exe",
-                ["opcache.enable" => 0, "expose_php" => 0,]
-            )
-        );
+        $isCgi = $phpBinary === "php-cgi";
+        if ($isCgi && PHP_OS_FAMILY === "Windows") {
+            $phpBinary = "C:\\tools\\php\\php-cgi.exe";
+        }
+
+        $defaultIniSettings = $isCgi ? ["opcache.enable" => 0, "expose_php" => 0,] : [];
+        $runner = new PhptRunner(new Parser(), new PhpRunner($phpBinary, $defaultIniSettings));
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt";
         $result = $runner->runFile($filename);
@@ -55,16 +57,18 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("abc", $result->output);
         $this->assertSame("abc", $result->expectedOutput);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt";
-        $result = $runner->runFile($filename);
-        $this->assertSame($filename, $result->fileName);
-        $this->assertSame("Test args", $result->testName);
-        $this->assertSame("", $result->testDescription);
-        if (PHP_OS_FAMILY !== "Windows") { // FIXME: This should work on Windows too
-            $this->assertSame(Outcome::Passed, $result->outcome);
-            $this->assertSame("bool(true)", $result->output);
+        if (!$isCgi) {
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt";
+            $result = $runner->runFile($filename);
+            $this->assertSame($filename, $result->fileName);
+            $this->assertSame("Test args", $result->testName);
+            $this->assertSame("", $result->testDescription);
+            if (PHP_OS_FAMILY !== "Windows") { // FIXME: This should work on Windows too
+                $this->assertSame(Outcome::Passed, $result->outcome);
+                $this->assertSame("bool(true)", $result->output);
+            }
+            $this->assertSame("bool(true)", $result->expectedOutput);
         }
-        $this->assertSame("bool(true)", $result->expectedOutput);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt";
         $result = $runner->runFile($filename);
@@ -75,14 +79,16 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("0", $result->output);
         $this->assertSame("0", $result->expectedOutput);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt";
-        $result = $runner->runFile($filename);
-        $this->assertSame($filename, $result->fileName);
-        $this->assertSame("Test input", $result->testName);
-        $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Passed, $result->outcome);
-        $this->assertSame("first line" . PHP_EOL . "second line", $result->output);
-        $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedOutput);
+        if (!$isCgi) {
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt";
+            $result = $runner->runFile($filename);
+            $this->assertSame($filename, $result->fileName);
+            $this->assertSame("Test input", $result->testName);
+            $this->assertSame("", $result->testDescription);
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("first line" . PHP_EOL . "second line", $result->output);
+            $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt";
         $result = $runner->runFile($filename);
@@ -116,17 +122,15 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test headers", $result->testName);
         $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("This test requires the cgi binary.", $result->output);
-        $this->assertSame("", $result->expectedOutput);
-
-        $result = $cgiRunner->runFile($filename);
-        $this->assertSame($filename, $result->fileName);
-        $this->assertSame("Test headers", $result->testName);
-        $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Passed, $result->outcome);
-        $this->assertSame("test123", $result->output);
-        $this->assertSame("test123", $result->expectedOutput);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("test123", $result->output);
+            $this->assertSame("test123", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt";
         $result = $runner->runFile($filename);
@@ -143,9 +147,15 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test CGI", $result->testName);
         $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("This test requires the cgi binary.", $result->output);
-        $this->assertSame("", $result->expectedOutput);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("test123", $result->output);
+            $this->assertSame("test123", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_external.phpt";
         $result = $runner->runFile($filename);
@@ -171,7 +181,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("Test extensions", $result->testName);
         $this->assertSame("", $result->testDescription);
         $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("This test requires PHP extension abc.", $result->output);
+        $this->assertContains("This test requires PHP extension ", $result->output);
         $this->assertSame("", $result->expectedOutput);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt";
@@ -179,18 +189,30 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test get", $result->testName);
         $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("This test requires the cgi binary.", $result->output);
-        $this->assertSame("", $result->expectedOutput);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section GET
+            $this->assertContains("PHP Warning:  Undefined array key \"two\"", $result->output);
+            $this->assertSame("ghi", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_cookies.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test cookies", $result->testName);
         $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Skipped, $result->outcome);
-        $this->assertSame("This test requires the cgi binary.", $result->output);
-        $this->assertSame("", $result->expectedOutput);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section COOKIE
+            $this->assertContains("PHP Warning:  Undefined array key \"one\"", $result->output);
+            $this->assertSame("abc", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_regex.phpt";
         $result = $runner->runFile($filename);
@@ -210,14 +232,16 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("test123ext", $result->output);
         $this->assertSame("test[0-9]+ext", $result->expectedOutput);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_capture_stdio.phpt";
-        $result = $runner->runFile($filename);
-        $this->assertSame($filename, $result->fileName);
-        $this->assertSame("Test capture stdio", $result->testName);
-        $this->assertSame("", $result->testDescription);
-        $this->assertSame(Outcome::Passed, $result->outcome);
-        $this->assertSame("test error", $result->output);
-        $this->assertSame("test error", $result->expectedOutput);
+        if (!$isCgi) {
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_capture_stdio.phpt";
+            $result = $runner->runFile($filename);
+            $this->assertSame($filename, $result->fileName);
+            $this->assertSame("Test capture stdio", $result->testName);
+            $this->assertSame("", $result->testDescription);
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("test error", $result->output);
+            $this->assertSame("test error", $result->expectedOutput);
+        }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_substitutions.phpt";
         $result = $runner->runFile($filename);

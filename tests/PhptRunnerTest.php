@@ -20,6 +20,13 @@ final class PhptRunnerTest extends TestCase
     public function testRunFile(): void
     {
         $runner = new PhptRunner(new Parser(), new PhpRunner());
+        $cgiRunner = new PhptRunner(
+            new Parser(),
+            new PhpRunner(
+                PHP_OS_FAMILY !== "Windows" ? "php-cgi" : "C:\\tools\\php\\php-cgi.exe",
+                ["opcache.enable" => 0, "expose_php" => 0,]
+            )
+        );
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt";
         $result = $runner->runFile($filename);
@@ -112,6 +119,14 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertSame("This test requires the cgi binary.", $result->output);
         $this->assertSame("", $result->expectedOutput);
+
+        $result = $cgiRunner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test headers", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame(Outcome::Passed, $result->outcome);
+        $this->assertSame("test123", $result->output);
+        $this->assertSame("test123", $result->expectedOutput);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt";
         $result = $runner->runFile($filename);

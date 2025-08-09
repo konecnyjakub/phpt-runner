@@ -37,6 +37,36 @@ final readonly class PhptRunner
         return $this->phpRunner->runCode($parsedFile->skipCode);
     }
 
+    /**
+     * Returns $output stripped of headers
+     */
+    private function getCleanOutput(string $output): string
+    {
+        $cleanOutput = $output;
+        if (str_contains($cleanOutput, "\r\n\r\n")) {
+            $cleanOutput = explode("\r\n\r\n", $cleanOutput, 2)[1];
+        }
+        return $cleanOutput;
+    }
+
+    /**
+     * Checks if $output meets conditions set in $parsedFile
+     */
+    private function isSuccess(ParsedFile $parsedFile, string $output): bool
+    {
+        $outputMatcher = new OutputMatcher($parsedFile);
+        if (!$outputMatcher->matches($this->getCleanOutput($output))) {
+            return false;
+        }
+
+        if (count($parsedFile->expectedHeaders) > 0) {
+            $headersMatcher = new HeadersMatcher($parsedFile);
+            return $headersMatcher->matches($output);
+        }
+
+        return true;
+    }
+
     public function runFile(string $fileName): FileResultSet
     {
         try {
@@ -82,7 +112,6 @@ final readonly class PhptRunner
 
         $this->eventDispatcher?->dispatch(new Events\TestStarted($parsedFile));
         $success = true;
-        $outputMatcher = new OutputMatcher($parsedFile);
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
             $output = $this->phpRunner->runCode(
                 $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
@@ -95,7 +124,7 @@ final readonly class PhptRunner
                 $parsedFile->captureStdout,
                 $parsedFile->captureStderr
             );
-            $success = $outputMatcher->matches($output);
+            $success = $this->isSuccess($parsedFile, $output);
 
             if ($success || $parsedFile->flaky !== false) {
                 break;
@@ -115,8 +144,8 @@ final readonly class PhptRunner
             $parsedFile->testName,
             $parsedFile->testDescription,
             $success ? Outcome::Passed : Outcome::Failed,
-            $output, // @phpstan-ignore variable.undefined
-            $outputMatcher->getExpectedOutput()
+            $this->getCleanOutput($output), // @phpstan-ignore variable.undefined
+            (new OutputMatcher($parsedFile))->getExpectedOutput()
         );
         $this->eventDispatcher?->dispatch(new Events\TestFinished($fileResultSet));
         $this->eventDispatcher?->dispatch(

@@ -3,6 +3,7 @@ Version 0.4.0-dev
 - added TestsRunner
 - common ini settings can now be set for PhpRunner
 - implemented section EXPECTHEADERS
+- fixed SKIP section with the cgi binary
 
 Version 0.3.0
 - added events to PhptRunner

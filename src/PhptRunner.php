@@ -34,7 +34,7 @@ final readonly class PhptRunner
         if ($parsedFile->skipCode === "") {
             return null;
         }
-        return $this->phpRunner->runCode($parsedFile->skipCode);
+        return $this->getCleanOutput($this->phpRunner->runCode($parsedFile->skipCode));
     }
 
     /**

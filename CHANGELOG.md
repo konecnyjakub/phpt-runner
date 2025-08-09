@@ -1,6 +1,7 @@
 Version 0.4.0-dev
 - PhptRunner now reports parse error as a failure
 - added TestsRunner
+- common ini settings can now be set for PhpRunner
 
 Version 0.3.0
 - added events to PhptRunner

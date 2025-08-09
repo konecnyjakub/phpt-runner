@@ -8,7 +8,10 @@ namespace Konecnyjakub\PHPTRunner;
  */
 final readonly class PhpRunner
 {
-    public function __construct(private string $phpBinary = PHP_BINARY)
+    /**
+     * @param array<string, string|int|float> $defaultIniSettings
+     */
+    public function __construct(private string $phpBinary = PHP_BINARY, private array $defaultIniSettings = [])
     {
     }
 
@@ -85,7 +88,7 @@ final readonly class PhpRunner
         fwrite($file, $code);
 
         $process = proc_open(
-            $this->createCommandLine($filename, $iniSettings, $arguments),
+            $this->createCommandLine($filename, array_merge($this->defaultIniSettings, $iniSettings), $arguments),
             $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr),
             $pipes,
             $workingDirectory,

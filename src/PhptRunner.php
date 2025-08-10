@@ -67,6 +67,20 @@ final readonly class PhptRunner
         return true;
     }
 
+    /**
+     * @return array<string, string>
+     */
+    private function getEnvVariables(ParsedFile $parsedFile): array
+    {
+        $envVariables = [
+            "REQUEST_METHOD" => "GET",
+            "QUERY_STRING" => http_build_query($parsedFile->getData),
+            "HTTP_COOKIE" => http_build_query($parsedFile->cookies, arg_separator: ";"),
+            "REDIRECT_STATUS" => "200",
+        ];
+        return array_merge($parsedFile->envVariables, $envVariables);
+    }
+
     public function runFile(string $fileName): FileResultSet
     {
         try {
@@ -117,7 +131,7 @@ final readonly class PhptRunner
             $output = $this->phpRunner->runCode(
                 $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
                 $parsedFile->iniSettings,
-                $parsedFile->envVariables,
+                $this->getEnvVariables($parsedFile),
                 $parsedFile->arguments,
                 $parsedFile->input,
                 dirname($fileName),

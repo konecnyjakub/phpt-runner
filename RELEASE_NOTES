@@ -1,6 +1,6 @@
 A new version of PHPT runner is out. It adds TestsRunner which can be used to run all .phpt files from a given directory.
 
-PhptRunner now reports parse errors from a file as a failure (instead of propagating an exception). It also now checks if expected headers are present and have the expected value.
+PhptRunner now reports parse errors from a file as a failure (instead of propagating an exception). It also now uses sections EXPECTHEADERS, GET and COOKIE.
 
 PhpRunner and PhptRunner are tested against the cgi binary and as a result some issues were fixed.
 

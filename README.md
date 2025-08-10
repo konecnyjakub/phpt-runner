@@ -41,6 +41,8 @@ These sections work exactly as described in the documentation. If you notice any
 * --DESCRIPTION--
 * --SKIPIF--
 * --CAPTURE_STDIO--
+* --GET--
+* --COOKIE--
 * --STDIN--
 * --INI--
 * --ARGS--
@@ -63,8 +65,6 @@ These sections work exactly as described in the documentation. If you notice any
 These sections are used by PhptRunner but there are some differences from behavior described in the documentation. We want to eventually eliminate the differences.
 
 * --EXTENSIONS-- (we do not try to load those extensions, we just skip the test if any of those extensions is not loaded)
-* --GET-- (it forces the use of the cgi binary but is not passed to it)
-* --COOKIE-- (it forces the use of the cgi binary but is not passed to it)
 * --EXPECTF-- (regular expressions %r...%r are not supported)
 * --EXPECTF_EXTERNAL-- (regular expressions %r...%r are not supported)
 

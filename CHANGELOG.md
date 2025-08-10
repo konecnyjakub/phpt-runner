@@ -2,7 +2,7 @@ Version 0.4.0-dev
 - PhptRunner now reports parse error as a failure
 - added TestsRunner
 - common ini settings can now be set for PhpRunner
-- implemented section EXPECTHEADERS
+- implemented sections EXPECTHEADERS, GET and COOKIE
 - fixed SKIP section with the cgi binary
 
 Version 0.3.0

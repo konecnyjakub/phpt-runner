@@ -233,11 +233,11 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("This test requires the cgi binary.", $result->output);
             $this->assertSame("", $result->expectedOutput);
         } else {
-            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section GET
-            $this->assertContains("PHP Warning:  Undefined array key \"two\"", $result->output);
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertContains("ghi", $result->output);
             $this->assertSame("ghi", $result->expectedOutput);
         }
-        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_cookies.phpt";
@@ -250,11 +250,11 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("This test requires the cgi binary.", $result->output);
             $this->assertSame("", $result->expectedOutput);
         } else {
-            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section COOKIE
-            $this->assertContains("PHP Warning:  Undefined array key \"one\"", $result->output);
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("abc", $result->output);
             $this->assertSame("abc", $result->expectedOutput);
         }
-        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_regex.phpt";

@@ -15,9 +15,9 @@ final class ParsedFile
     public bool $captureStderr = true;
     /** @var string[] */
     public array $requiredExtensions = [];
-    /** @var mixed[] */
+    /** @var array<string, string> */
     public array $getData = [];
-    /** @var mixed[] */
+    /** @var array<string, string> */
     public array $cookies = [];
     public string $input = "";
     /** @var array<string, string> */

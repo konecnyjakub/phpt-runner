@@ -87,6 +87,7 @@ final readonly class PhpRunner
         $filename = stream_get_meta_data($file)['uri'];
         fwrite($file, $code);
 
+        $env["SCRIPT_FILENAME"] = $filename;
         $process = proc_open(
             $this->createCommandLine($filename, array_merge($this->defaultIniSettings, $iniSettings), $arguments),
             $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr),

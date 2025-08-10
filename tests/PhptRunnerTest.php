@@ -223,6 +223,23 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame([], $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_post_variables.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test post variables", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section POST
+            $this->assertContains("PHP Warning:  Undefined array key \"two\"", $result->output);
+            $this->assertSame("ghi", $result->expectedOutput);
+        }
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
@@ -234,7 +251,7 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("", $result->expectedOutput);
         } else {
             $this->assertSame(Outcome::Passed, $result->outcome);
-            $this->assertContains("ghi", $result->output);
+            $this->assertSame("ghi", $result->output);
             $this->assertSame("ghi", $result->expectedOutput);
         }
         $this->assertSame($outputHeaders, $result->outputHeaders);

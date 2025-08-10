@@ -87,6 +87,11 @@ final readonly class PhptRunner
         return array_merge($parsedFile->envVariables, $envVariables);
     }
 
+    private function getInput(ParsedFile $parsedFile): string
+    {
+        return $parsedFile->input;
+    }
+
     public function runFile(string $fileName): FileResultSet
     {
         try {
@@ -139,7 +144,7 @@ final readonly class PhptRunner
                 $parsedFile->iniSettings,
                 $this->getEnvVariables($parsedFile),
                 $parsedFile->arguments,
-                $parsedFile->input,
+                $this->getInput($parsedFile),
                 dirname($fileName),
                 $parsedFile->captureStdin,
                 $parsedFile->captureStdout,

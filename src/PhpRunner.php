@@ -88,6 +88,7 @@ final readonly class PhpRunner
         fwrite($file, $code);
 
         $env["SCRIPT_FILENAME"] = $filename;
+        $env["PATH_TRANSLATED"] = $filename;
         $process = proc_open(
             $this->createCommandLine($filename, array_merge($this->defaultIniSettings, $iniSettings), $arguments),
             $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr),

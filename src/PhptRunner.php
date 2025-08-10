@@ -81,6 +81,8 @@ final readonly class PhptRunner
             "QUERY_STRING" => http_build_query($parsedFile->getData),
             "HTTP_COOKIE" => http_build_query($parsedFile->cookies, arg_separator: ";"),
             "REDIRECT_STATUS" => "200",
+            "CONTENT_TYPE" => "",
+            "CONTENT_LENGTH" => "",
         ];
         return array_merge($parsedFile->envVariables, $envVariables);
     }

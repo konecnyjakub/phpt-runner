@@ -4,6 +4,7 @@ Version 0.4.0-dev
 - common ini settings can now be set for PhpRunner
 - implemented sections EXPECTHEADERS, GET and COOKIE
 - fixed SKIP section with the cgi binary
+- section POST is parsed now
 
 Version 0.3.0
 - added events to PhptRunner

@@ -23,6 +23,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -54,6 +55,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -85,6 +87,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -116,6 +119,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -147,6 +151,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame(["allow_url_fopen" => "0", ], $result->iniSettings);
@@ -178,6 +183,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("first line" . PHP_EOL . "second line", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -209,6 +215,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -240,6 +247,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -271,6 +279,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -302,6 +311,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -339,6 +349,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -370,6 +381,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -401,6 +413,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -432,6 +445,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -463,6 +477,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame(["json", "abc", ], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -494,12 +509,45 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame(["one" => "abc", "two" => ["def", "ghi", ], ], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
         $this->assertSame("<?php echo \$_GET[\"two\"][1]; ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("ghi", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_variables.phpt");
+        $this->assertSame("Test post variables", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame("one=abc&two[]=def&two[]=ghi", $result->postData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo \$_POST[\"two\"][1]; ?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertTrue($result->requiresCgiBinary);
@@ -525,6 +573,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame(["one" => "abc", "two" => "def", ], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -556,6 +605,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -587,6 +637,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -618,6 +669,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -649,6 +701,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);
@@ -680,6 +733,7 @@ final class ParserTest extends TestCase
         $this->assertTrue($result->captureStderr);
         $this->assertSame([], $result->requiredExtensions);
         $this->assertSame([], $result->getData);
+        $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
         $this->assertSame("", $result->input);
         $this->assertSame([], $result->iniSettings);

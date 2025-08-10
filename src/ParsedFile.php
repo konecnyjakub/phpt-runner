@@ -17,6 +17,7 @@ final class ParsedFile
     public array $requiredExtensions = [];
     /** @var array<string, string> */
     public array $getData = [];
+    public string $postData = "";
     /** @var array<string, string> */
     public array $cookies = [];
     public string $input = "";

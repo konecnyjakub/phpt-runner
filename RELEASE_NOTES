@@ -2,6 +2,8 @@ A new version of PHPT runner is out. It adds TestsRunner which can be used to ru
 
 PhptRunner now reports parse errors from a file as a failure (instead of propagating an exception). It also now uses sections EXPECTHEADERS, GET and COOKIE.
 
+Section POST is parsed now.
+
 PhpRunner and PhptRunner are tested against the cgi binary and as a result some issues were fixed.
 
 For complete list of changes since previous version, see CHANGELOG.md.

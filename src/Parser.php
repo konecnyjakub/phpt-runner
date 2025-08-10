@@ -16,6 +16,7 @@ final readonly class Parser
     public const string SECTION_CONFLICTS = "CONFLICTS";
     public const string SECTION_CAPTURE_STDIO = "CAPTURE_STDIO";
     public const string SECTION_EXTENSIONS = "EXTENSIONS";
+    public const string SECTION_POST = "POST";
     public const string SECTION_GET = "GET";
     public const string SECTION_COOKIE = "COOKIE";
     public const string SECTION_STDIN = "STDIN";
@@ -67,6 +68,7 @@ final readonly class Parser
     private const array OPTIONAL_SECTIONS_STRING = [
         self::SECTION_DESCRIPTION,
         self::SECTION_SKIPIF,
+        self::SECTION_POST,
         self::SECTION_STDIN,
         self::SECTION_ARGS,
         self::SECTION_FILE,
@@ -95,6 +97,7 @@ final readonly class Parser
     ];
 
     private const array IMPLIED_CGI_SECTIONS = [
+        self::SECTION_POST,
         self::SECTION_GET,
         self::SECTION_COOKIE,
         self::SECTION_EXPECTHEADERS,
@@ -120,6 +123,7 @@ final readonly class Parser
         $result->captureStderr = in_array(self::STREAM_STDERR, $sections[self::SECTION_CAPTURE_STDIO], true); // @phpstan-ignore argument.type
         $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
         $result->getData = $sections[self::SECTION_GET]; // @phpstan-ignore assign.propertyType
+        $result->postData = $sections[self::SECTION_POST]; // @phpstan-ignore assign.propertyType
         $result->cookies = $sections[self::SECTION_COOKIE]; // @phpstan-ignore assign.propertyType
         $result->input = $sections[self::SECTION_STDIN]; // @phpstan-ignore assign.propertyType
         $result->iniSettings = $sections[self::SECTION_INI]; // @phpstan-ignore assign.propertyType
@@ -178,8 +182,10 @@ final readonly class Parser
         foreach (self::IMPLIED_CGI_SECTIONS as $sectionName) {
             if (
                 isset($sections[$sectionName]) &&
-                is_array($sections[$sectionName]) &&
-                count($sections[$sectionName]) > 0
+                (
+                    (is_array($sections[$sectionName]) &&  count($sections[$sectionName]) > 0) ||
+                    (is_string($sections[$sectionName]) && strlen($sections[$sectionName]) > 0)
+                )
             ) {
                 return true;
             }

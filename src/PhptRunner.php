@@ -112,6 +112,7 @@ final readonly class PhptRunner
 
         $this->eventDispatcher?->dispatch(new Events\TestStarted($parsedFile));
         $success = true;
+        $output = "";
         for ($attemptNumber = 1; $attemptNumber <= 2; $attemptNumber++) {
             $output = $this->phpRunner->runCode(
                 $parsedFile->testFile !== "" ? (string) file_get_contents($parsedFile->testFile) : $parsedFile->testCode,
@@ -144,8 +145,10 @@ final readonly class PhptRunner
             $parsedFile->testName,
             $parsedFile->testDescription,
             $success ? Outcome::Passed : Outcome::Failed,
-            $this->getCleanOutput($output), // @phpstan-ignore variable.undefined
-            (new OutputMatcher($parsedFile))->getExpectedOutput()
+            $this->getCleanOutput($output),
+            (new OutputMatcher($parsedFile))->getExpectedOutput(),
+            (new HeadersMatcher($parsedFile))->getOutputHeaders($output),
+            $parsedFile->expectedHeaders
         );
         $this->eventDispatcher?->dispatch(new Events\TestFinished($fileResultSet));
         $this->eventDispatcher?->dispatch(

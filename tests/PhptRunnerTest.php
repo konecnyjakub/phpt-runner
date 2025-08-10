@@ -28,6 +28,7 @@ final class PhptRunnerTest extends TestCase
         }
 
         $defaultIniSettings = $isCgi ? ["opcache.enable" => 0, "expose_php" => 0,] : [];
+        $outputHeaders = $isCgi ? ["content-type" => "text/html; charset=UTF-8",] : [];
         $runner = new PhptRunner(new Parser(), new PhpRunner($phpBinary, $defaultIniSettings));
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "skipped_test.phpt";
@@ -38,6 +39,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertSame("Skipped", $result->output);
         $this->assertSame("", $result->expectedOutput);
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test.phpt";
         $result = $runner->runFile($filename);
@@ -47,6 +50,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt";
         $result = $runner->runFile($filename);
@@ -56,6 +61,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("abc", $result->output);
         $this->assertSame("abc", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         if (!$isCgi) {
             $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt";
@@ -68,6 +75,8 @@ final class PhptRunnerTest extends TestCase
                 $this->assertSame("bool(true)", $result->output);
             }
             $this->assertSame("bool(true)", $result->expectedOutput);
+            $this->assertSame($outputHeaders, $result->outputHeaders);
+            $this->assertSame([], $result->expectedHeaders);
         }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt";
@@ -78,6 +87,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("0", $result->output);
         $this->assertSame("0", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         if (!$isCgi) {
             $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt";
@@ -88,6 +99,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame(Outcome::Passed, $result->outcome);
             $this->assertSame("first line" . PHP_EOL . "second line", $result->output);
             $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedOutput);
+            $this->assertSame($outputHeaders, $result->outputHeaders);
+            $this->assertSame([], $result->expectedHeaders);
         }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt";
@@ -98,6 +111,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test1234", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt";
         $result = $runner->runFile($filename);
@@ -107,6 +122,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertNotSame(Outcome::Skipped, $result->outcome);
         //$this->assertSame("1", $result->output);
         $this->assertSame("1", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_conflicts.phpt";
         $result = $runner->runFile($filename);
@@ -116,6 +133,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_expected_headers.phpt";
         $result = $runner->runFile($filename);
@@ -126,10 +145,20 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame(Outcome::Skipped, $result->outcome);
             $this->assertSame("This test requires the cgi binary.", $result->output);
             $this->assertSame("", $result->expectedOutput);
+            $this->assertSame($outputHeaders, $result->outputHeaders);
+            $this->assertSame([], $result->expectedHeaders);
         } else {
             $this->assertSame(Outcome::Passed, $result->outcome);
             $this->assertSame("test123", $result->output);
             $this->assertSame("test123", $result->expectedOutput);
+            $this->assertSame(
+                ["content-type" => "text/plain; charset=UTF-8", "pragma" => "no-cache", ],
+                $result->outputHeaders
+            );
+            $this->assertSame(
+                ["Content-type" => "text/plain; charset=UTF-8", "Pragma" => "no-cache", ],
+                $result->expectedHeaders
+            );
         }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt";
@@ -141,6 +170,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
         $this->assertFalse(is_file(__DIR__ . DIRECTORY_SEPARATOR . "tmp1.txt"));
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_cgi.phpt";
         $result = $runner->runFile($filename);
@@ -156,6 +187,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("test123", $result->output);
             $this->assertSame("test123", $result->expectedOutput);
         }
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_external.phpt";
         $result = $runner->runFile($filename);
@@ -165,6 +198,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_fileeof.phpt";
         $result = $runner->runFile($filename);
@@ -174,6 +209,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test123", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_extensions.phpt";
         $result = $runner->runFile($filename);
@@ -183,6 +220,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Skipped, $result->outcome);
         $this->assertContains("This test requires PHP extension ", $result->output);
         $this->assertSame("", $result->expectedOutput);
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt";
         $result = $runner->runFile($filename);
@@ -198,6 +237,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertContains("PHP Warning:  Undefined array key \"two\"", $result->output);
             $this->assertSame("ghi", $result->expectedOutput);
         }
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_cookies.phpt";
         $result = $runner->runFile($filename);
@@ -213,6 +254,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertContains("PHP Warning:  Undefined array key \"one\"", $result->output);
             $this->assertSame("abc", $result->expectedOutput);
         }
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_regex.phpt";
         $result = $runner->runFile($filename);
@@ -222,6 +265,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test[0-9]+", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_regex_external.phpt";
         $result = $runner->runFile($filename);
@@ -231,6 +276,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("test123ext", $result->output);
         $this->assertSame("test[0-9]+ext", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         if (!$isCgi) {
             $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_capture_stdio.phpt";
@@ -241,6 +288,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame(Outcome::Passed, $result->outcome);
             $this->assertSame("test error", $result->output);
             $this->assertSame("test error", $result->expectedOutput);
+            $this->assertSame($outputHeaders, $result->outputHeaders);
+            $this->assertSame([], $result->expectedHeaders);
         }
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_substitutions.phpt";
@@ -251,6 +300,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("+123 abc test", $result->output);
         $this->assertSame("%i%w%s test", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_substitutions_external.phpt";
         $result = $runner->runFile($filename);
@@ -260,6 +311,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("11f test ext", $result->output);
         $this->assertSame("%x%sext", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_skip_xfail.phpt";
         $result = $runner->runFile($filename);
@@ -269,6 +322,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Passed, $result->outcome);
         $this->assertSame("one", $result->output);
         $this->assertSame("two", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_skip_flaky.phpt";
         $result = $runner->runFile($filename);
@@ -278,6 +333,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertNotSame(Outcome::Skipped, $result->outcome);
         //$this->assertSame("1", $result->output);
         $this->assertSame("1", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing_test.phpt";
         $result = $runner->runFile($filename);
@@ -287,6 +344,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Failed, $result->outcome);
         $this->assertSame("test123", $result->output);
         $this->assertSame("test1234", $result->expectedOutput);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
         $result = $runner->runFile($filename);
@@ -296,6 +355,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Failed, $result->outcome);
         $this->assertSame("Invalid file: Required section TEST not found in file $filename", $result->output);
         $this->assertSame("", $result->expectedOutput);
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
         $result = $runner->runFile($filename);
@@ -305,6 +366,8 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame(Outcome::Failed, $result->outcome);
         $this->assertSame("Invalid file: At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL, EXPECTF, EXPECTF_EXTERNAL is required, none found in file $filename", $result->output);
         $this->assertSame("", $result->expectedOutput);
+        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
     }
 
     public function testEvents(): void

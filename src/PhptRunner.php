@@ -72,6 +72,10 @@ final readonly class PhptRunner
      */
     private function getEnvVariables(ParsedFile $parsedFile): array
     {
+        if (!$parsedFile->requiresCgiBinary) {
+            return $parsedFile->envVariables;
+        }
+
         $envVariables = [
             "REQUEST_METHOD" => "GET",
             "QUERY_STRING" => http_build_query($parsedFile->getData),

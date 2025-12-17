@@ -84,14 +84,14 @@ final readonly class PhpRunner
         bool $captureStderr = true
     ): string {
         $file = tmpfile();
-        $filename = stream_get_meta_data($file)['uri'];
+        $filename = stream_get_meta_data($file)['uri']; // @phpstan-ignore offsetAccess.notFound
         fwrite($file, $code);
 
         $env["SCRIPT_FILENAME"] = $filename;
         $env["PATH_TRANSLATED"] = $filename;
         $process = proc_open(
             $this->createCommandLine($filename, array_merge($this->defaultIniSettings, $iniSettings), $arguments),
-            $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr),
+            $this->createPipesSpec($captureStdin, $captureStdout, $captureStderr), // @phpstan-ignore argument.type
             $pipes,
             $workingDirectory,
             $env

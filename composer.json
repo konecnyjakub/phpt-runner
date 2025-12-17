@@ -23,7 +23,7 @@
         "squizlabs/php_codesniffer": "^4.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/phpstan-deprecation-rules": "^2.0",
-        "konecnyjakub/mytester": "^8.2",
+        "konecnyjakub/mytester": "^9.0@dev",
         "konecnyjakub/event-dispatcher": "^2.2",
         "psr/log": "^3.0"
     },

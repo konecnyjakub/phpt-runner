@@ -353,7 +353,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing_test.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "failing_test.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Failing test", $result->testName);
@@ -364,7 +364,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("", $result->testName);
@@ -375,7 +375,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame([], $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("", $result->testName);
@@ -413,7 +413,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertFalse($eventDispatcher->dispatched(TestPassed::class, 2));
         $this->assertFalse($eventDispatcher->dispatched(TestFailed::class));
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing_test.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "failing_test.phpt";
         $runner->runFile($filename);
         $this->assertTrue($eventDispatcher->dispatched(TestSkipped::class));
         $this->assertFalse($eventDispatcher->dispatched(TestSkipped::class, 2));

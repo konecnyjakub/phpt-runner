@@ -237,7 +237,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
 
-        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt");
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_flaky.phpt");
         $this->assertSame("Flaky test", $result->testName);
         $this->assertSame("", $result->testDescription);
         $this->assertSame("", $result->skipCode);

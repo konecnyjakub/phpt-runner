@@ -114,7 +114,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_flaky.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_flaky.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Flaky test", $result->testName);
@@ -342,7 +342,7 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_skip_flaky.phpt";
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_skip_flaky.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);
         $this->assertSame("Test skip flaky", $result->testName);

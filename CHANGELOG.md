@@ -1,3 +1,6 @@
+Version 0.5.0-dev
+- dropped support for PHP 8.3
+
 Version 0.4.0
 - PhptRunner now reports parse error as a failure
 - added TestsRunner

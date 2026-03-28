@@ -179,18 +179,11 @@ final readonly class Parser
         if ($sections[self::SECTION_CGI] !== false) {
             return true;
         }
-        foreach (self::IMPLIED_CGI_SECTIONS as $sectionName) {
-            if (
-                isset($sections[$sectionName]) &&
-                (
-                    (is_array($sections[$sectionName]) &&  count($sections[$sectionName]) > 0) ||
-                    (is_string($sections[$sectionName]) && strlen($sections[$sectionName]) > 0)
-                )
-            ) {
-                return true;
-            }
-        }
-        return false;
+        return array_any(self::IMPLIED_CGI_SECTIONS, static fn($sectionName) => isset($sections[$sectionName]) &&
+            (
+                (is_array($sections[$sectionName]) && count($sections[$sectionName]) > 0) ||
+                (is_string($sections[$sectionName]) && strlen($sections[$sectionName]) > 0)
+            ));
     }
 
     /**

@@ -44,7 +44,7 @@ final class PhpRunnerTest extends TestCase
         $this->assertSame($defaultOutputHeaders . "abc", $runner->runCode($code));
 
         $code = "<?php die('skip'); ?>";
-        $this->assertSame($defaultOutputHeaders . "skip", $runner->runCode($code,));
+        $this->assertSame($defaultOutputHeaders . "skip", $runner->runCode($code));
 
         $code = "<?php fclose(\$abc); ?>";
         $result = $runner->runCode($code);

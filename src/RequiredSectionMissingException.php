@@ -15,7 +15,7 @@ class RequiredSectionMissingException extends ParseErrorException
         if (is_string($section)) {
             $message = "Required section $section not found in file $filename";
         } else {
-            $message = "At least one of sections " . join(", ", $section) . " is required, none found in file $filename";
+            $message = "At least one of sections " . implode(", ", $section) . " is required, none found in file $filename";
         }
         parent::__construct($message, $code, $previous);
     }

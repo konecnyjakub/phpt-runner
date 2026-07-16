@@ -756,17 +756,17 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->cleanCode);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
-        $this->assertThrowsException(function () use ($parser, $filename) {
+        $this->assertThrowsException(static function () use ($parser, $filename) {
             $parser->parse($filename);
         }, FileNotFoundException::class, "File $filename does not exist or cannot be read");
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_invalid1.phpt";
-        $this->assertThrowsException(function () use ($parser, $filename) {
+        $this->assertThrowsException(static function () use ($parser, $filename) {
             $parser->parse($filename);
         }, RequiredSectionMissingException::class, "Required section TEST not found in file $filename");
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_invalid2.phpt";
-        $this->assertThrowsException(function () use ($parser, $filename) {
+        $this->assertThrowsException(static function () use ($parser, $filename) {
             $parser->parse($filename);
         }, RequiredSectionMissingException::class, "At least one of sections EXPECT, EXPECT_EXTERNAL, EXPECTREGEX, EXPECTREGEX_EXTERNAL, EXPECTF, EXPECTF_EXTERNAL is required, none found in file $filename");
     }

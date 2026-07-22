@@ -84,7 +84,7 @@ final readonly class PhpRunner
         bool $captureStderr = true
     ): string {
         $file = tmpfile();
-        $filename = stream_get_meta_data($file)['uri']; // @phpstan-ignore offsetAccess.notFound
+        $filename = stream_get_meta_data($file)["uri"]; // @phpstan-ignore offsetAccess.notFound
         fwrite($file, $code);
 
         $env["SCRIPT_FILENAME"] = $filename;

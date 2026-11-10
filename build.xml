@@ -56,8 +56,7 @@
             <else>
                 <exec executable="vendor/bin/mytester" logoutput="true" passthru="true" checkreturn="true">
                     <arg value="--colors"/>
-                    <arg value="--filterExceptFolders"/>
-                    <arg value="failing"/>
+                    <arg value="--noPhpt"/>
                 </exec>
             </else>
         </if>

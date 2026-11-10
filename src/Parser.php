@@ -17,6 +17,8 @@ final readonly class Parser
     public const string SECTION_CAPTURE_STDIO = "CAPTURE_STDIO";
     public const string SECTION_EXTENSIONS = "EXTENSIONS";
     public const string SECTION_POST = "POST";
+    public const string SECTION_GZIP_POST = "GZIP_POST";
+    public const string SECTION_DEFLATE_POST = "DEFLATE_POST";
     public const string SECTION_GET = "GET";
     public const string SECTION_COOKIE = "COOKIE";
     public const string SECTION_STDIN = "STDIN";
@@ -69,6 +71,8 @@ final readonly class Parser
         self::SECTION_DESCRIPTION,
         self::SECTION_SKIPIF,
         self::SECTION_POST,
+        self::SECTION_GZIP_POST,
+        self::SECTION_DEFLATE_POST,
         self::SECTION_STDIN,
         self::SECTION_ARGS,
         self::SECTION_FILE,
@@ -98,6 +102,8 @@ final readonly class Parser
 
     private const array IMPLIED_CGI_SECTIONS = [
         self::SECTION_POST,
+        self::SECTION_GZIP_POST,
+        self::SECTION_DEFLATE_POST,
         self::SECTION_GET,
         self::SECTION_COOKIE,
         self::SECTION_EXPECTHEADERS,
@@ -123,7 +129,13 @@ final readonly class Parser
         $result->captureStderr = in_array(self::STREAM_STDERR, $sections[self::SECTION_CAPTURE_STDIO], true); // @phpstan-ignore argument.type
         $result->requiredExtensions = $sections[self::SECTION_EXTENSIONS]; // @phpstan-ignore assign.propertyType
         $result->getData = $sections[self::SECTION_GET]; // @phpstan-ignore assign.propertyType
-        $result->postData = $sections[self::SECTION_POST]; // @phpstan-ignore assign.propertyType
+        if ($sections[self::SECTION_GZIP_POST] !== "") {
+            $result->postData = $sections[self::SECTION_GZIP_POST]; // @phpstan-ignore assign.propertyType
+        } elseif ($sections[self::SECTION_DEFLATE_POST] !== "") {
+            $result->postData = $sections[self::SECTION_DEFLATE_POST]; // @phpstan-ignore assign.propertyType
+        } else {
+            $result->postData = $sections[self::SECTION_POST]; // @phpstan-ignore assign.propertyType
+        }
         $result->cookies = $sections[self::SECTION_COOKIE]; // @phpstan-ignore assign.propertyType
         $result->input = $sections[self::SECTION_STDIN]; // @phpstan-ignore assign.propertyType
         $result->iniSettings = $sections[self::SECTION_INI]; // @phpstan-ignore assign.propertyType
@@ -144,6 +156,11 @@ final readonly class Parser
         $result->expectedRegex = $sections[self::SECTION_EXPECTREGEX] ?? ""; // @phpstan-ignore assign.propertyType
         $result->expectedRegexFile = $sections[self::SECTION_EXPECTREGEX_EXTERNAL] ?? ""; // @phpstan-ignore assign.propertyType
         $result->cleanCode = $sections[self::SECTION_CLEAN]; // @phpstan-ignore assign.propertyType
+
+        $result->requestMethod = $this->detectRequestMethod($sections);
+        $result->contentType = $this->detectContentType($sections);
+        $result->contentEncoding = $this->detectContentEncoding($sections);
+        $result->contentLength = $this->calculateContentLength($sections);
 
         return $result;
     }
@@ -261,7 +278,24 @@ final readonly class Parser
                 $values[] = $stream;
             }
         }
+        // FIXME: force STDIN if there is POST/PUT data
         return $values;
+    }
+
+    private function transformGzipPost(string $value): string
+    {
+        if ($value === "") {
+            return "";
+        }
+        return (string) gzencode(trim($value), 9, FORCE_GZIP);
+    }
+
+    private function transformDeflatePost(string $value): string
+    {
+        if ($value === "") {
+            return "";
+        }
+        return (string) gzcompress(trim($value), 9);
     }
 
     /**
@@ -286,6 +320,8 @@ final readonly class Parser
                 self::SECTION_GET => $this->transformGetToArray($content),
                 self::SECTION_COOKIE => $this->transformCookiesToArray($content),
                 self::SECTION_CAPTURE_STDIO => $this->transformCaptureStreamsToArray($content),
+                self::SECTION_GZIP_POST => $this->transformGzipPost($content),
+                self::SECTION_DEFLATE_POST => $this->transformDeflatePost($content),
                 default => $content,
             };
         }
@@ -336,5 +372,59 @@ final readonly class Parser
                 }
             }
         }
+    }
+
+    /**
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
+     */
+    private function detectRequestMethod(array $sections): ?string
+    {
+        if ($sections[self::SECTION_POST] !== "" || $sections[self::SECTION_GZIP_POST] !== "" || $sections[self::SECTION_DEFLATE_POST] !== "") {
+            return "POST";
+        } elseif ($this->isCgiRequired($sections)) {
+            return "GET";
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
+     */
+    private function detectContentType(array $sections): string
+    {
+        if ($sections[self::SECTION_POST] !== "" || $sections[self::SECTION_GZIP_POST] !== "" || $sections[self::SECTION_DEFLATE_POST] !== "") {
+            return "application/x-www-form-urlencoded";
+        }
+
+        return "";
+    }
+
+    /**
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
+     */
+    private function detectContentEncoding(array $sections): ?string
+    {
+        if ($sections[self::SECTION_GZIP_POST] !== "") {
+            return "gzip";
+        } elseif ($sections[self::SECTION_DEFLATE_POST] !== "") {
+            return "deflate";
+        }
+        return null;
+    }
+
+    /**
+     * @param array<string, string|bool|array<string, mixed>|mixed[]> $sections
+     */
+    private function calculateContentLength(array $sections): ?int
+    {
+        if ($sections[self::SECTION_POST] !== "") {
+            return strlen($sections[self::SECTION_POST]); // @phpstan-ignore argument.type
+        } elseif ($sections[self::SECTION_GZIP_POST] !== "") {
+            return strlen($sections[self::SECTION_GZIP_POST]); // @phpstan-ignore argument.type
+        } elseif ($sections[self::SECTION_DEFLATE_POST] !== "") {
+            return strlen($sections[self::SECTION_DEFLATE_POST]); // @phpstan-ignore argument.type
+        }
+        return null;
     }
 }

@@ -68,7 +68,7 @@ final readonly class PhptRunner
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, string|int>
      */
     private function getEnvVariables(ParsedFile $parsedFile): array
     {
@@ -77,18 +77,22 @@ final readonly class PhptRunner
         }
 
         $envVariables = [
-            "REQUEST_METHOD" => "GET",
+            "REQUEST_METHOD" => (string) $parsedFile->requestMethod,
             "QUERY_STRING" => http_build_query($parsedFile->getData),
             "HTTP_COOKIE" => http_build_query($parsedFile->cookies, arg_separator: ";"),
             "REDIRECT_STATUS" => "200",
-            "CONTENT_TYPE" => "",
-            "CONTENT_LENGTH" => "",
+            "CONTENT_TYPE" => $parsedFile->contentType,
+            "CONTENT_LENGTH" => $parsedFile->contentLength ?? "",
+            "HTTP_CONTENT_ENCODING" => $parsedFile->contentEncoding ?? "",
         ];
         return array_merge($parsedFile->envVariables, $envVariables);
     }
 
     private function getInput(ParsedFile $parsedFile): string
     {
+        if ($parsedFile->postData !== "") {
+            return $parsedFile->postData;
+        }
         return $parsedFile->input;
     }
 

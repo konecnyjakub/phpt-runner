@@ -1,3 +1,5 @@
 A new version of PHPT runner is out. It requires PHP 8.4 or later.
 
+Sections POST, GZIP_POST and DEFLATE_POST are now used in PhptRunner.
+
 For complete list of changes since previous version, see CHANGELOG.md.

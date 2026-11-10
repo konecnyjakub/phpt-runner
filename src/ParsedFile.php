@@ -44,4 +44,9 @@ final class ParsedFile
     public string $expectedRegex = "";
     public string $expectedRegexFile = "";
     public string $cleanCode = "";
+
+    public ?string $requestMethod = null;
+    public string $contentType = "";
+    public ?string $contentEncoding = null;
+    public ?int $contentLength = null;
 }

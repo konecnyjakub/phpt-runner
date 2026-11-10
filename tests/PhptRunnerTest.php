@@ -233,11 +233,10 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("This test requires the cgi binary.", $result->output);
             $this->assertSame("", $result->expectedOutput);
         } else {
-            $this->assertSame(Outcome::Failed, $result->outcome); // FIXME: implement section POST
-            $this->assertContains("PHP Warning:  Undefined array key \"two\"", $result->output);
+            $this->assertSame(Outcome::Passed, $result->outcome);
             $this->assertSame("ghi", $result->expectedOutput);
         }
-        $this->assertSame([], $result->outputHeaders);
+        $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt";
@@ -253,6 +252,38 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame(Outcome::Passed, $result->outcome);
             $this->assertSame("ghi", $result->output);
             $this->assertSame("ghi", $result->expectedOutput);
+        }
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_post_gzip.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test post gzip", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("1", $result->expectedOutput);
+        }
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_post_deflate.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test post deflate", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("1", $result->expectedOutput);
         }
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);

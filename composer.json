@@ -28,7 +28,8 @@
         "psr/log": "^3.0"
     },
     "suggest": {
-        "psr/event-dispatcher": "To use events in PhptRunner"
+        "psr/event-dispatcher": "To use events in PhptRunner",
+        "ext-zlib": "To use sections GZIP_POST and DEFLATE_POST"
     },
     "autoload": {
         "psr-4": {

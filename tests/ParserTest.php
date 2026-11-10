@@ -44,6 +44,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test.phpt");
         $this->assertSame("Test", $result->testName);
@@ -76,6 +80,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_env.phpt");
         $this->assertSame("Test env", $result->testName);
@@ -108,6 +116,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_args.phpt");
         $this->assertSame("Test args", $result->testName);
@@ -140,6 +152,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");
         $this->assertSame("Test ini", $result->testName);
@@ -172,6 +188,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_input.phpt");
         $this->assertSame("Test input", $result->testName);
@@ -204,6 +224,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_xfail.phpt");
         $this->assertSame("Failing test", $result->testName);
@@ -236,6 +260,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "failing" . DIRECTORY_SEPARATOR . "test_flaky.phpt");
         $this->assertSame("Flaky test", $result->testName);
@@ -268,6 +296,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_conflicts.phpt");
         $this->assertSame("Conflicting test", $result->testName);
@@ -300,6 +332,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_expected_headers.phpt");
         $this->assertSame("Test headers", $result->testName);
@@ -338,6 +374,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertSame("GET", $result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_clean.phpt");
         $this->assertSame("", $result->testDescription);
@@ -370,6 +410,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("<?php unlink(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\") ?>", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_cgi.phpt");
         $this->assertSame("Test CGI", $result->testName);
@@ -402,6 +446,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertSame("GET", $result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_external.phpt", false);
         $this->assertSame("", $result->testDescription);
@@ -434,6 +482,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_fileeof.phpt");
         $this->assertSame("Test fileeof", $result->testName);
@@ -466,6 +518,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_extensions.phpt");
         $this->assertSame("Test extensions", $result->testName);
@@ -498,6 +554,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_get.phpt");
         $this->assertSame("Test get", $result->testName);
@@ -530,6 +590,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertSame("GET", $result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_variables.phpt");
         $this->assertSame("Test post variables", $result->testName);
@@ -562,6 +626,84 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertSame("POST", $result->requestMethod);
+        $this->assertSame("application/x-www-form-urlencoded", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNotNull($result->contentLength);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_gzip.phpt");
+        $this->assertSame("Test post gzip", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertNotSame("one=abc&two[]=def&two[]=ghi", $result->postData);
+        $this->assertNotSame("", $result->postData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo count(\$_POST); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("1", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+        $this->assertSame("POST", $result->requestMethod);
+        $this->assertSame("application/x-www-form-urlencoded", $result->contentType);
+        $this->assertSame("gzip", $result->contentEncoding);
+        $this->assertNotNull($result->contentLength);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_deflate.phpt");
+        $this->assertSame("Test post deflate", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertNotSame("one=abc&two[]=def&two[]=ghi", $result->postData);
+        $this->assertNotSame("", $result->postData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php echo count(\$_POST); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("1", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+        $this->assertSame("POST", $result->requestMethod);
+        $this->assertSame("application/x-www-form-urlencoded", $result->contentType);
+        $this->assertSame("deflate", $result->contentEncoding);
+        $this->assertNotNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_cookies.phpt");
         $this->assertSame("Test cookies", $result->testName);
@@ -594,6 +736,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertSame("GET", $result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_regex.phpt");
         $this->assertSame("Test regex", $result->testName);
@@ -626,6 +772,10 @@ final class ParserTest extends TestCase
         $this->assertSame("test[0-9]+", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_regex_external.phpt");
         $this->assertSame("Test regex external", $result->testName);
@@ -658,6 +808,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame(__DIR__ . DIRECTORY_SEPARATOR . "test_external_output_regex.txt", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_capture_stdio.phpt");
         $this->assertSame("Test capture stdio", $result->testName);
@@ -690,6 +844,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_substitutions.phpt");
         $this->assertSame("Test substitutions", $result->testName);
@@ -722,6 +880,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_substitutions_external.phpt");
         $this->assertSame("Test substitutions external", $result->testName);
@@ -754,6 +916,10 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->expectedRegex);
         $this->assertSame("", $result->expectedRegexFile);
         $this->assertSame("", $result->cleanCode);
+        $this->assertNull($result->requestMethod);
+        $this->assertSame("", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNull($result->contentLength);
 
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "non-existing.phpt";
         $this->assertThrowsException(static function () use ($parser, $filename) {

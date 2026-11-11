@@ -53,8 +53,8 @@ final readonly class Parser
 
     private const array REQUIRED_SECTIONS = [
         self::SECTION_TEST,
-        [self::SECTION_FILE, self::SECTION_FILEEOF, self::SECTION_FILE_EXTERNAL, self::SECTION_REDIRECTTEST, ],
-        [self::SECTION_EXPECT, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTREGEX, self::SECTION_EXPECTREGEX_EXTERNAL, self::SECTION_EXPECTF, self::SECTION_EXPECTF_EXTERNAL, ],
+        [self::SECTION_FILE, self::SECTION_FILEEOF, self::SECTION_FILE_EXTERNAL, self::SECTION_REDIRECTTEST,],
+        [self::SECTION_EXPECT, self::SECTION_EXPECT_EXTERNAL, self::SECTION_EXPECTREGEX, self::SECTION_EXPECTREGEX_EXTERNAL, self::SECTION_EXPECTF, self::SECTION_EXPECTF_EXTERNAL,],
     ];
 
     private const array OPTIONAL_SECTIONS_ARRAY = [
@@ -196,7 +196,7 @@ final readonly class Parser
         if ($sections[self::SECTION_CGI] !== false) {
             return true;
         }
-        return array_any(self::IMPLIED_CGI_SECTIONS, static fn($sectionName) => isset($sections[$sectionName]) &&
+        return array_any(self::IMPLIED_CGI_SECTIONS, static fn ($sectionName) => isset($sections[$sectionName]) &&
             (
                 (is_array($sections[$sectionName]) && count($sections[$sectionName]) > 0) ||
                 (is_string($sections[$sectionName]) && strlen($sections[$sectionName]) > 0)
@@ -418,12 +418,12 @@ final readonly class Parser
      */
     private function calculateContentLength(array $sections): ?int
     {
-        if ($sections[self::SECTION_POST] !== "") {
-            return strlen($sections[self::SECTION_POST]); // @phpstan-ignore argument.type
-        } elseif ($sections[self::SECTION_GZIP_POST] !== "") {
+        if ($sections[self::SECTION_GZIP_POST] !== "") {
             return strlen($sections[self::SECTION_GZIP_POST]); // @phpstan-ignore argument.type
         } elseif ($sections[self::SECTION_DEFLATE_POST] !== "") {
             return strlen($sections[self::SECTION_DEFLATE_POST]); // @phpstan-ignore argument.type
+        } elseif ($sections[self::SECTION_POST] !== "") {
+            return strlen($sections[self::SECTION_POST]); // @phpstan-ignore argument.type
         }
         return null;
     }

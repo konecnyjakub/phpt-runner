@@ -1,5 +1,5 @@
 Version 0.5.0-dev
-- implemented sections POST, GZIP_POST and DEFLATE_POST
+- implemented sections POST, GZIP_POST, DEFLATE_POST, POST_RAW and PUT
 
 Version 0.4.0
 - PhptRunner now reports parse error as a failure

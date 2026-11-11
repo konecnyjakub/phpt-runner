@@ -18,7 +18,7 @@ final class TestsRunnerTest extends TestCase
         $this->assertSame(0, $result->testsTotal);
 
         $result = $testsRunner->run(__DIR__);
-        $this->assertCount(25, $result->results);
-        $this->assertSame(25, $result->testsTotal);
+        $this->assertCount(27, $result->results);
+        $this->assertSame(27, $result->testsTotal);
     }
 }

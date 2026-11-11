@@ -42,6 +42,8 @@ These sections work exactly as described in the documentation. If you notice any
 * --SKIPIF--
 * --CAPTURE_STDIO--
 * --POST--
+* --POST_RAW--
+* --PUT--
 * --GZIP_POST--
 * --DEFLATE_POST--
 * --GET--
@@ -85,5 +87,3 @@ These sections are completely ignored by both Parser and PhptRunner right now. T
 
 * --CREDITS--
 * --WHITESPACE_SENSITIVE--
-* --POST_RAW--
-* --PUT--

@@ -631,6 +631,89 @@ final class ParserTest extends TestCase
         $this->assertNull($result->contentEncoding);
         $this->assertNotNull($result->contentLength);
 
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_raw.phpt");
+        $this->assertSame("Test post raw", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame('
+--AaB03x
+content-disposition: form-data; name="field1"
+
+abc
+--AaB03x
+content-disposition: form-data; name="field2"; filename="test.txt"
+Content-Type: text/plain
+
+abcdef123456789
+--AaB03x--', $result->postData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php var_dump(\$_POST[\"field1\"] === \"abc\" && is_uploaded_file(\$_FILES[\"field2\"][\"tmp_name\"])); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("bool(true)", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+        $this->assertSame("POST", $result->requestMethod);
+        $this->assertSame("multipart/form-data, boundary=AaB03x", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNotNull($result->contentLength);
+
+        $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_put.phpt");
+        $this->assertSame("Test put", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        $this->assertSame("", $result->skipCode);
+        $this->assertSame([], $result->conflictingKeys);
+        $this->assertTrue($result->captureStdin);
+        $this->assertTrue($result->captureStdout);
+        $this->assertTrue($result->captureStderr);
+        $this->assertSame([], $result->requiredExtensions);
+        $this->assertSame([], $result->getData);
+        $this->assertSame('
+{"field1": "abc", "field2": "def"}', $result->postData);
+        $this->assertSame([], $result->cookies);
+        $this->assertSame("", $result->input);
+        $this->assertSame([], $result->iniSettings);
+        $this->assertSame("", $result->arguments);
+        $this->assertSame([], $result->envVariables);
+        $this->assertSame("<?php \$input = json_decode(file_get_contents(\"php://input\")); var_dump(\$input instanceof stdClass && \$input->field1 === \"abc\" && \$input->field2 === \"def\"); ?>", $result->testCode);
+        $this->assertSame("", $result->testFile);
+        $this->assertSame([], $result->testRedirects);
+        $this->assertTrue($result->requiresCgiBinary);
+        $this->assertSame([], $result->phpdbgCommands);
+        $this->assertSame(false, $result->supposedToFail);
+        $this->assertSame(false, $result->flaky);
+        $this->assertSame([], $result->expectedHeaders);
+        $this->assertSame("bool(true)", $result->expectedText);
+        $this->assertSame("", $result->expectedTextFile);
+        $this->assertSame("", $result->expectedPattern);
+        $this->assertSame("", $result->expectedPatternFile);
+        $this->assertSame("", $result->expectedRegex);
+        $this->assertSame("", $result->expectedRegexFile);
+        $this->assertSame("", $result->cleanCode);
+        $this->assertSame("PUT", $result->requestMethod);
+        $this->assertSame("application/json", $result->contentType);
+        $this->assertNull($result->contentEncoding);
+        $this->assertNotNull($result->contentLength);
+
         $result = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_post_gzip.phpt");
         $this->assertSame("Test post gzip", $result->testName);
         $this->assertSame("", $result->testDescription);

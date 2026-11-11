@@ -256,6 +256,38 @@ final class PhptRunnerTest extends TestCase
         $this->assertSame($outputHeaders, $result->outputHeaders);
         $this->assertSame([], $result->expectedHeaders);
 
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_post_raw.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test post raw", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("bool(true)", $result->expectedOutput);
+        }
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
+
+        $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_put.phpt";
+        $result = $runner->runFile($filename);
+        $this->assertSame($filename, $result->fileName);
+        $this->assertSame("Test put", $result->testName);
+        $this->assertSame("", $result->testDescription);
+        if (!$isCgi) {
+            $this->assertSame(Outcome::Skipped, $result->outcome);
+            $this->assertSame("This test requires the cgi binary.", $result->output);
+            $this->assertSame("", $result->expectedOutput);
+        } else {
+            $this->assertSame(Outcome::Passed, $result->outcome);
+            $this->assertSame("bool(true)", $result->expectedOutput);
+        }
+        $this->assertSame($outputHeaders, $result->outputHeaders);
+        $this->assertSame([], $result->expectedHeaders);
+
         $filename = __DIR__ . DIRECTORY_SEPARATOR . "test_post_gzip.phpt";
         $result = $runner->runFile($filename);
         $this->assertSame($filename, $result->fileName);

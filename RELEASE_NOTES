@@ -1,3 +1,5 @@
 A new version of PHPT runner is out. Sections POST, GZIP_POST, DEFLATE_POST, POST_RAW and PUT are now used in PhptRunner.
 
+TestsRunner now supports PSR-14 events.
+
 For complete list of changes since previous version, see CHANGELOG.md.

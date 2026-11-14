@@ -68,7 +68,7 @@ final readonly class PhptRunner
     }
 
     /**
-     * @return array<string, string|int>
+     * @return array<string, string>
      */
     private function getEnvVariables(ParsedFile $parsedFile): array
     {
@@ -82,7 +82,7 @@ final readonly class PhptRunner
             "HTTP_COOKIE" => http_build_query($parsedFile->cookies, arg_separator: ";"),
             "REDIRECT_STATUS" => "200",
             "CONTENT_TYPE" => $parsedFile->contentType,
-            "CONTENT_LENGTH" => $parsedFile->contentLength ?? "",
+            "CONTENT_LENGTH" => (string) $parsedFile->contentLength,
             "HTTP_CONTENT_ENCODING" => $parsedFile->contentEncoding ?? "",
         ];
         return array_merge($parsedFile->envVariables, $envVariables);

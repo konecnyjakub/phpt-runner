@@ -1,4 +1,4 @@
-Version 0.5.0-dev
+Version 0.5.0
 - implemented sections POST, GZIP_POST, DEFLATE_POST, POST_RAW and PUT
 - added events to TestsRunner
 

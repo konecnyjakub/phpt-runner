@@ -65,7 +65,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -205,7 +205,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->getData);
         $this->assertSame("", $result->postData);
         $this->assertSame([], $result->cookies);
-        $this->assertSame("first line" . PHP_EOL . "second line", $result->input);
+        $this->assertSame("first line\nsecond line", $result->input);
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
@@ -217,7 +217,7 @@ final class ParserTest extends TestCase
         $this->assertSame(false, $result->supposedToFail);
         $this->assertSame(false, $result->flaky);
         $this->assertSame([], $result->expectedHeaders);
-        $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedText);
+        $this->assertSame("first line\nsecond line", $result->expectedText);
         $this->assertSame("", $result->expectedTextFile);
         $this->assertSame("", $result->expectedPattern);
         $this->assertSame("", $result->expectedPatternFile);
@@ -245,7 +245,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -281,7 +281,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo rand(0, 1);" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho rand(0, 1);\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -317,7 +317,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -354,7 +354,7 @@ final class ParserTest extends TestCase
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
         $this->assertSame(
-            "<?php" . PHP_EOL . "header(\"Content-type: text/plain; charset=UTF-8\");" . PHP_EOL . "header(\"Pragma: no-cache\");" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>",
+            "<?php\nheader(\"Content-type: text/plain; charset=UTF-8\");\nheader(\"Pragma: no-cache\");\necho \"test123\";\n?>",
             $result->testCode
         );
         $this->assertSame("", $result->testFile);
@@ -395,7 +395,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "touch(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\");" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\ntouch(__DIR__ . DIRECTORY_SEPARATOR . \"tmp1.txt\");\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -431,7 +431,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertTrue($result->requiresCgiBinary);
@@ -503,7 +503,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "//last line comment", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n//last line comment", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -539,7 +539,7 @@ final class ParserTest extends TestCase
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);
@@ -912,7 +912,7 @@ abcdef123456789
         $this->assertSame([], $result->iniSettings);
         $this->assertSame("", $result->arguments);
         $this->assertSame([], $result->envVariables);
-        $this->assertSame("<?php" . PHP_EOL . "echo \"test123\";" . PHP_EOL . "fwrite(STDERR, \"test error\");" . PHP_EOL . "?>", $result->testCode);
+        $this->assertSame("<?php\necho \"test123\";\nfwrite(STDERR, \"test error\");\n?>", $result->testCode);
         $this->assertSame("", $result->testFile);
         $this->assertSame([], $result->testRedirects);
         $this->assertFalse($result->requiresCgiBinary);

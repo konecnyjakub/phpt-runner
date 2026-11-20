@@ -97,8 +97,8 @@ final class PhptRunnerTest extends TestCase
             $this->assertSame("Test input", $result->testName);
             $this->assertSame("", $result->testDescription);
             $this->assertSame(Outcome::Passed, $result->outcome);
-            $this->assertSame("first line" . PHP_EOL . "second line", $result->output);
-            $this->assertSame("first line" . PHP_EOL . "second line", $result->expectedOutput);
+            $this->assertSame("first line\nsecond line", $result->output);
+            $this->assertSame("first line\nsecond line", $result->expectedOutput);
             $this->assertSame($outputHeaders, $result->outputHeaders);
             $this->assertSame([], $result->expectedHeaders);
         }

@@ -95,7 +95,7 @@ final class PhpRunnerTest extends TestCase
                 $parsedFile->testCode,
                 input: $parsedFile->input
             );
-            $this->assertSame($defaultOutputHeaders . "first line" . PHP_EOL . "second line", $result);
+            $this->assertSame($defaultOutputHeaders . "first line\nsecond line", $result);
         }
 
         $parsedFile = $parser->parse(__DIR__ . DIRECTORY_SEPARATOR . "test_ini.phpt");

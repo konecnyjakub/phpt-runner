@@ -320,9 +320,14 @@ final readonly class Parser
          * @var string $content
          */
         foreach ($sections as $sectionName => &$content) {
-            $content = trim($content);
+            $content = str_replace("\r\n", "\n", $content);
+            if (in_array($sectionName, [self::SECTION_POST, self::SECTION_STDIN, self::SECTION_EXPECT, self::SECTION_EXPECTF,], true)) {
+                $content = rtrim($content, "\n");
+            } else {
+                $content = trim($content);
+            }
             if (in_array($sectionName, self::SINGLE_LINE_SECTIONS, true)) {
-                $content = explode(PHP_EOL, $content, 2)[0];
+                $content = explode("\n", $content, 2)[0];
             }
             $content = match ($sectionName) {
                 self::SECTION_ENV, self::SECTION_INI => $this->transformConfigToArray($content),
